@@ -18,6 +18,7 @@ Set up design-kit in the current repo.
    - "Where should design-kit projects live?" (default: `design-kit/projects/`)
    - "Pause and confirm before each sprint stage runs?" (default: no)
    - "Locale for outputs?" (default: `en`)
+   - "Market research depth during sprints? `light` uses training knowledge only (token-efficient, default). `full` enables web search for current competitive data. `off` skips it." (default: `light`)
    - "Append a 'Design Kit' section to existing CLAUDE.md, or create one?"
 
 3. **Bootstrap the design system context** — ask:

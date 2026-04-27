@@ -10,7 +10,10 @@ Orchestrates a design sprint end-to-end.
 
 1. **Stage 1 — Data & Intent** (core)
    - Use `data-analyst` agent if GA4 or analytics are available.
-   - Use `market-researcher` agent for competitive context.
+   - Read `marketResearch` from `design-kit.config.json` (default: `"light"`):
+     - `"off"` — skip market researcher entirely.
+     - `"light"` — invoke `market-researcher` in Stage 1 Contribution Mode (training knowledge only, no web search, 200 words max).
+     - `"full"` — invoke `market-researcher` with web search enabled for current competitive data.
    - Output: `<project-path>/01-data-intent.md` with R fields `stage: 1, project, intent_statement`.
    - Validate against `01-data-intent.schema.json`.
    - Update `STATUS.md` → `state: wip, last_stage: 01-data-intent`.
