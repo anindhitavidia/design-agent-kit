@@ -57,11 +57,25 @@ Structure competitive research into tiers relevant to the product's category. As
 
 **Design quality benchmarks** (not direct competitors) — Products known for best-in-class UX that set the visual and interaction quality bar.
 
-Use web search to verify current positioning of competitors in fast-moving categories.
+Use web search to verify current positioning of competitors in fast-moving categories — **only when `marketResearch` is set to `"full"` in `design-kit.config.json`**. In `"light"` mode, rely on training knowledge only.
+
+## Market Research Modes
+
+Read `marketResearch` from `design-kit.config.json` before any sprint invocation:
+
+| Mode | Behavior |
+|------|----------|
+| `"light"` (default) | Stage 1 contribution only. Use training knowledge — **no web search calls**. Max 200 words. |
+| `"full"` | Full competitive analysis with web search enabled. Use for standalone research requests. |
+| `"off"` | Skip market research entirely. Do not append to research intake files. |
+
+If the field is missing, treat it as `"light"`.
 
 ## Stage 1 Contribution Mode
 
 When invoked from a design sprint Stage 1 to contribute to a research intake file, your role is a **focused competitive scan** — not a full analysis. Keep it to 200 words max.
+
+**Do NOT call any web search or fetch tools in this mode.** Use your training knowledge. If you genuinely don't know the competitive space, say so in one sentence — don't search. Users can set `marketResearch: "full"` in `design-kit.config.json` to unlock web search for deeper research.
 
 **Section header to use:** `## Competitive Landscape`
 
