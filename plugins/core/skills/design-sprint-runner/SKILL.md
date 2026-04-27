@@ -8,6 +8,26 @@ Orchestrates a design sprint end-to-end.
 
 ## Stages
 
+## Stage pausing
+
+Read `confirmBeforeStages` from `design-kit.config.json` (default: `true`).
+
+- `true` — pause at every stage transition. Print what was produced, then ask the user to review and confirm before the next stage begins. **This is the default and recommended setting.**
+- `false` — run all stages end-to-end without pausing. Only use this for automated or CI workflows.
+
+At each pause, print:
+```
+Stage N complete. Artifacts written:
+  - <file-path>
+  - <file-path>
+
+Review the files above, then reply "continue" (or "yes") to proceed to Stage N+1, or "stop" to save state and exit.
+```
+
+Do not proceed to the next stage until the user explicitly confirms.
+
+## Stages
+
 1. **Stage 1 — Data & Intent** (core)
    - Use `data-analyst` agent if GA4 or analytics are available.
    - Read `marketResearch` from `design-kit.config.json` (default: `"light"`):
@@ -17,6 +37,7 @@ Orchestrates a design sprint end-to-end.
    - Output: `<project-path>/01-data-intent.md` with R fields `stage: 1, project, intent_statement`.
    - Validate against `01-data-intent.schema.json`.
    - Update `STATUS.md` → `state: wip, last_stage: 01-data-intent`.
+   - **If `confirmBeforeStages: true`:** pause here. Ask user to review `01-data-intent.md` before Stage 2.
 
 2. **Stage 2 — Design Brief**
    - Use `ux-designer` agent for user flows and edge cases.
@@ -24,15 +45,15 @@ Orchestrates a design sprint end-to-end.
    - Output: `<project-path>/02-brief.md` (R: problem, target_users) AND `<project-path>/02-design-spec.md` (R: layout_pattern, components_needed).
    - Validate both against their schemas.
    - Update `STATUS.md` → `state: spec-ready, last_stage: 02-design-spec`.
+   - **If `confirmBeforeStages: true`:** pause here. This is the critical review gate — the user should read `02-brief.md` and `02-design-spec.md` and confirm the design direction before any code is written. Make this explicit in the prompt.
 
 3. **Stage 3 — Prototype** (dispatched to stack profile)
    - Read `design-kit.config.json` → `stackProfile`.
-   - If `confirmBeforeStages: true`, ask the user before proceeding.
    - Invoke `/design-kit-{stackProfile}:prototype <project-path>`.
    - The stack profile updates `STATUS.md` → `state: prototype-ready, last_stage: 03-prototype`.
+   - **If `confirmBeforeStages: true`:** pause here. Ask user to review the prototype before Stage 4.
 
 4. **Stage 4 — Handoff Prep** (dispatched to stack profile)
-   - If `confirmBeforeStages: true`, ask the user before proceeding.
    - Invoke `/design-kit-{stackProfile}:handoff-prep <project-path>`.
    - The stack profile writes `04-handoff/` and updates `STATUS.md` → `state: handed-off`.
 

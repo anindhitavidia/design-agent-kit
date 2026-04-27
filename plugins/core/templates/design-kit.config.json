@@ -10,6 +10,6 @@
     "codingRules": "docs/context/coding-rules.md"
   },
   "locale": "en",
-  "confirmBeforeStages": false,
+  "confirmBeforeStages": true,
   "marketResearch": "light"
 }

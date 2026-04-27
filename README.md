@@ -58,7 +58,7 @@ Key config options:
 | Field | Default | Description |
 |---|---|---|
 | `stackProfile` | `"react-nextjs"` | Which stack profile plugin to dispatch Stage 3 & 4 to |
-| `confirmBeforeStages` | `false` | Pause and confirm before each sprint stage runs |
+| `confirmBeforeStages` | `true` | Pause for human review between every stage. Set to `false` only for automated/CI runs |
 | `marketResearch` | `"light"` | `"light"` = training knowledge only (token-efficient); `"full"` = web search enabled; `"off"` = skip |
 
 ## Updating
