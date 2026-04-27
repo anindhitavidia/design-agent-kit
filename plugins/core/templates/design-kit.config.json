@@ -4,6 +4,7 @@
   "stackProfile": "react-nextjs",
   "projectRoot": "design-kit/projects",
   "contextPaths": {
+    "product": "docs/context/product.md",
     "brand": "docs/context/brand.md",
     "designSystem": "docs/context/design-system.md",
     "personas": "docs/context/personas.md",

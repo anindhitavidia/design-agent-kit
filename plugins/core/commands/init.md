@@ -1,105 +1,176 @@
 ---
-description: One-time setup for design-kit in this repo. Asks setup questions, scaffolds DESIGN.md, REVIEW.md, CODING_GUIDELINES.md, design-kit.config.json, and docs/context/*.md into the user's working tree. Can bootstrap design-system.md and brand.md from a Figma link, GitHub URL, or npm package. Idempotent — re-running skips existing files.
+description: One-time setup for design-kit in this repo. Walks through stack profile selection, product context, design system, and brand bootstrapping. Scaffolds all context files and config. Idempotent — re-running skips existing files.
 ---
 
 # /design-kit:init
 
-Set up design-kit in the current repo.
+Set up design-kit in the current repo. Work through each step in order — do not skip ahead.
 
-## Behavior
+---
 
-1. **Detect or pick the stack profile.**
-   - Run `/plugin list` (or inspect `~/.claude/plugins/installed_plugins.json`) to find installed `design-kit-*` plugins.
-   - If exactly one stack profile is installed, default to it.
-   - If multiple, ask which.
-   - If none, warn: "Stage 3 and Stage 4 of the design sprint won't run end-to-end without a stack profile. Continue with discovery-only mode?" Proceed if user confirms.
+## Step 1 — Choose a stack profile
 
-1b. **Run stack-specific setup.**
-   - If a stack profile was selected and it has a `setup` command, invoke `/design-kit-{stackProfile}:setup` now.
-   - This installs and configures any stack prerequisites (e.g. shadcn/ui for react-nextjs) before the first sprint runs, so setup interruptions don't happen mid-prototype.
-   - If the setup command doesn't exist for the selected profile, skip silently.
+Check installed `design-kit-*` plugins via `/plugin list` (or `~/.claude/plugins/installed_plugins.json`).
 
-2. **Ask setup questions:**
-   - "Where should design-kit projects live?" (default: `design-kit/projects/`)
-   - "The sprint pauses between stages for you to review artifacts before proceeding — this is the recommended default. Disable pauses only for automated/CI runs. Skip pauses? (default: no)"
-   - "Locale for outputs?" (default: `en`)
-   - "Market research depth during sprints? `light` uses training knowledge only (token-efficient, default). `full` enables web search for current competitive data. `off` skips it." (default: `light`)
-   - "Append a 'Design Kit' section to existing CLAUDE.md, or create one?"
+**If a stack profile is already installed:** confirm it with the user. If multiple are installed, ask which to use.
 
-3. **Bootstrap the design system context** — ask:
+**If no stack profile is installed:** present the options and ask which to install:
 
-   > "Do you have a design system? Share one of: a Figma library link, a GitHub URL, an npm package name, or type 'none' to scaffold a template."
+> "No stack profile installed. Choose one:"
+>
+> 1. **react-nextjs** — React + Next.js + shadcn/ui + Tailwind. Full production-quality prototypes. Requires an existing Next.js project.
+> 2. **html** — Self-contained HTML + DaisyUI + Tailwind CDN + Alpine.js. No build step, open in browser. Best for quick prototyping or when you don't have a Next.js project.
+> 3. **discovery-only** — Skip prototyping (Stages 3–4 won't run). Research, briefs, and specs only.
+>
+> Which would you like? (1 / 2 / 3)
 
-   Handle each case:
+- For option 1 or 2: run `/plugin install design-kit-{profile}@design-agent-kit` then proceed.
+- For option 3: note in config that `stackProfile` is unset; warn that Stages 3–4 will be skipped.
 
-   **Figma link** (`figma.com/...`):
-   - Use the Figma MCP (`get_libraries`, `search_design_system`, `get_variable_defs`) to fetch the component list, color styles, text styles, and spacing tokens.
-   - Write a populated `docs/context/design-system.md` with the real component inventory, import path slot, and token summary pulled from Figma.
+---
 
-   **GitHub URL** (`github.com/...`):
-   - Fetch the repo's README and any barrel export file (e.g. `src/index.ts`, `index.js`) to extract the exported component names.
-   - Write a populated `docs/context/design-system.md` with the component list and a TODO for the import path.
+## Step 2 — Run stack-specific setup
 
-   **npm package name** (e.g. `@acme/design-system`):
-   - Fetch the package page on npmjs.com or the package README to extract component exports.
-   - Write a populated `docs/context/design-system.md` with the component list and the correct import path already filled in.
+If a stack profile was selected, invoke `/design-kit-{stackProfile}:setup` now. This installs prerequisites (e.g. shadcn/ui for react-nextjs) before the first sprint, so nothing interrupts mid-prototype.
 
-   **none / skip**:
-   - Scaffold the rich template from `plugins/core/templates/docs/context/design-system.md`.
+---
 
-4. **Bootstrap the brand context** — ask:
+## Step 3 — Product context
 
-   > "Do you have brand documentation? Share a Figma file link (for color and text styles), a URL to brand guidelines, or type 'none' to scaffold a template."
+Ask:
 
-   Handle each case:
+> "Tell me about your product. Share a URL (product site, docs, or app), paste a short description, or type 'none' to scaffold a template."
 
-   **Figma link** (`figma.com/...`):
-   - Use the Figma MCP (`get_variable_defs`, `get_design_context`) to fetch color variables, text styles, and any design system rules defined in Figma.
-   - Write a populated `docs/context/brand.md` with real palette names/values, typography scale, and spacing philosophy pulled from Figma.
+**URL provided:**
+- Fetch the page and extract: product name, description, target users, core value proposition, and market positioning.
+- Write to `docs/context/product.md`.
 
-   **URL** (any other URL):
-   - Fetch the page and summarize it into `docs/context/brand.md`: extract voice/tone description, palette, typography, and any stated design principles.
+**Text provided:**
+- Write it directly to `docs/context/product.md` under `## Description`.
 
-   **none / skip**:
-   - Scaffold the rich template from `plugins/core/templates/docs/context/brand.md`.
+**none / skip:**
+- Scaffold the template from `plugins/core/templates/docs/context/product.md`.
 
-5. **Run the scaffold script** with the collected config (skips files already written in steps 3–4):
+This file is read by all agents as background context. It also seeds brand and design system bootstrapping if the user has no existing documentation.
 
-   ```bash
-   node plugins/core/scripts/scaffold.mjs --target . --config <collected-config>
-   ```
+---
 
-6. **Append Design Kit section to CLAUDE.md** at the user's repo root (creating CLAUDE.md if absent):
+## Step 4 — Design system
 
-   ```markdown
-   ## Design Kit
+Ask:
 
-   This repo uses [`design-agent-kit`](https://github.com/anindhitavidia/design-agent-kit). Configuration: `design-kit.config.json`.
+> "Do you have a design system? Share one of: a Figma library link, a GitHub URL, an npm package name, or type 'none'."
 
-   Common commands:
-   - `/design-kit:design-sprint <project-name>` — run the full design sprint pipeline
-   - `/design-kit:design-brief` — research + brief only
-   - `/design-kit:design-qa <url>` — run QA on a rendered URL
-   - `/design-kit:brand-audit` — check brand consistency
+**Figma link** (`figma.com/...`):
+- Use the Figma MCP (`get_libraries`, `search_design_system`, `get_variable_defs`) to fetch the component list, color styles, text styles, and spacing tokens.
+- Write a populated `docs/context/design-system.md`.
 
-   Context files agents read: `DESIGN.md`, `REVIEW.md`, `CODING_GUIDELINES.md`, `docs/context/*.md`.
-   ```
+**GitHub URL** (`github.com/...`):
+- Fetch the repo README and barrel export file to extract component names.
+- Write a populated `docs/context/design-system.md` with component list and a TODO for the import path.
 
-7. **Print summary:**
-   - List files created (with paths), noting which were bootstrapped from Figma/GitHub/URL vs scaffolded from template
-   - List files skipped (already existed)
-   - Print 3 next steps:
-     1. "Review and fill in any remaining TODOs in `docs/context/`."
-     2. "Run `/design-kit:design-sprint <project-name>` to start your first sprint."
-     3. "Run `/design-kit:brand-audit` to validate brand context is complete enough for agents."
+**npm package name** (e.g. `@acme/design-system`):
+- Fetch the package README to extract component exports and import path.
+- Write a populated `docs/context/design-system.md`.
+
+**none / skip:**
+- If product context was provided in Step 3, use it to write a minimal `docs/context/design-system.md` noting the product category and any inferred conventions.
+- Otherwise scaffold the rich template from `plugins/core/templates/docs/context/design-system.md`.
+
+---
+
+## Step 5 — Brand
+
+Ask:
+
+> "Do you have brand documentation? Share a Figma file link (for color and text styles), a URL to brand guidelines, or type 'none'."
+
+**Figma link** (`figma.com/...`):
+- Use the Figma MCP (`get_variable_defs`, `get_design_context`) to fetch color variables, text styles, and design rules.
+- Write a populated `docs/context/brand.md` with real palette names, typography scale, and spacing philosophy.
+
+**URL** (any other URL):
+- Fetch the page and summarize: voice/tone, palette, typography, design principles.
+- Write a populated `docs/context/brand.md`.
+
+**none / skip:**
+- If product context was provided in Step 3, use it to infer and write a minimal `docs/context/brand.md` (e.g. product category → likely formality level, target market → appropriate tone).
+- Otherwise scaffold the rich template from `plugins/core/templates/docs/context/brand.md`.
+
+---
+
+## Step 6 — Configuration questions
+
+Ask each question in sequence:
+
+1. **"Where should design-kit projects live?"** (default: `design-kit/projects/`)
+
+2. **"The sprint pauses between stages so you can review artifacts before proceeding — this is on by default. Turn pauses off? (default: no)"**
+   - "no" (default) → `confirmBeforeStages: true` — keep pauses on
+   - "yes" → `confirmBeforeStages: false` — run end-to-end (CI/automated use only)
+
+3. **"Locale for outputs?"** (default: `en`)
+
+4. **"Market research depth in sprints?"**
+   - `light` (default) — training knowledge only, token-efficient
+   - `full` — web search enabled for current competitive data
+   - `off` — skip market research
+
+5. **"Append a 'Design Kit' section to existing CLAUDE.md, or create one?"**
+
+---
+
+## Step 7 — Scaffold
+
+Run the scaffold script with collected config (skips files already written in Steps 3–5):
+
+```bash
+node plugins/core/scripts/scaffold.mjs --target . --config <collected-config>
+```
+
+---
+
+## Step 8 — Append to CLAUDE.md
+
+Append at the user's repo root (create CLAUDE.md if absent):
+
+```markdown
+## Design Kit
+
+This repo uses [`design-agent-kit`](https://github.com/anindhitavidia/design-agent-kit). Configuration: `design-kit.config.json`.
+
+Common commands:
+- `/design-kit:design-sprint <project-name>` — run the full design sprint pipeline
+- `/design-kit:design-brief <project-name>` — research + brief only
+- `/design-kit:design-qa <url>` — run QA on a rendered URL
+- `/design-kit:brand-audit` — check brand consistency
+
+Context files agents read: `docs/context/product.md`, `docs/context/brand.md`, `docs/context/design-system.md`, `docs/context/personas.md`.
+```
+
+---
+
+## Step 9 — Summary
+
+Print:
+- Files created (note: bootstrapped from Figma/URL/npm vs scaffolded from template)
+- Files skipped (already existed)
+- Stack profile installed and setup status
+
+Print next steps:
+1. "Review any remaining TODOs in `docs/context/` — especially `personas.md`."
+2. "Run `/design-kit:design-sprint <project-name>` to start your first sprint."
+3. "Run `/design-kit:brand-audit` to validate brand context is complete enough for agents."
+
+---
 
 ## Idempotency
 
-Re-running `/design-kit:init` is safe. It skips existing files and reports what's missing. Pass `--force` to overwrite (asks for confirmation per file).
+Re-running `/design-kit:init` is safe — it skips existing files and reports what's missing. Pass `--force` to overwrite (confirms per file).
 
 ## Error cases
 
-- If no `package.json` or `.git/` is found at the target root, warn: "This doesn't look like a project root. Run from your repo root, or pass `--target <path>`."
-- If the user's `design-kit.config.json` already exists with a different `stackProfile`, ask before overwriting.
-- If Figma MCP is not available and user provided a Figma link, warn and fall back to the rich template. Tell the user to install the Figma MCP and re-run with `--force` to populate from Figma later.
-- If a URL fetch fails, warn and fall back to the rich template.
+- No `package.json` or `.git/` at root → warn: "This doesn't look like a project root. Run from your repo root, or pass `--target <path>`."
+- `design-kit.config.json` exists with a different `stackProfile` → ask before overwriting.
+- Figma MCP not available but Figma link provided → warn and fall back to template. Tell user to install the Figma MCP and re-run with `--force`.
+- URL fetch fails → warn and fall back to template.
