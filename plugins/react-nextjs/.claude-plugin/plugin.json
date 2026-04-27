@@ -1,0 +1,9 @@
+{
+  "name": "design-kit-react-nextjs",
+  "description": "React + Next.js stack profile for design-kit. Implements the prototype and handoff-prep contract commands.",
+  "version": "0.1.0",
+  "author": {
+    "name": "anindhitavidia"
+  },
+  "keywords": ["design", "react", "nextjs", "tailwind", "prototype"]
+}
