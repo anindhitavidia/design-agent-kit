@@ -24,11 +24,14 @@ A Claude Code plugin marketplace for design agents and orchestration. Ships a st
 
 ## The design sprint pipeline
 
-`/design-kit:design-sprint` runs a 4-stage pipeline:
+`/design-kit:design-sprint` runs a 7-stage pipeline with human review pauses between every stage:
 
-1. **Data & Intent** — `data-analyst` + `market-researcher` agents produce `01-data-intent.md`; use `data-viz-engineer` for data-heavy features
-2. **Design Brief** — `ux-designer` + `product-designer` agents produce `02-brief.md` + `02-design-spec.md`
+1. **Data & Intent** — `data-analyst` + `ux-designer` (qualitative signals) + `market-researcher` produce `01-data-intent.md`
+1.5. **Ideation** *(optional)* — `brainstorming-design` skill explores problem space before locking in direction
+2. **Design Brief** — `ux-designer` + `product-designer` produce `02-brief.md` + `02-design-spec.md`
+2.5. **Design Explore** — `design-explore` skill generates 2-3 lightweight directions that challenge the brief; stack profile builds cheap DS-component sketches; user picks one direction before any prototype code is written
 3. **Prototype** — dispatched to the active stack profile (`design-kit-react-nextjs:prototype`)
+3.5. **Design Iterate** — automated `design-qa` run + mandatory stakeholder review pause; iterates until sign-off
 4. **Handoff Prep** — dispatched to the active stack profile (`design-kit-react-nextjs:handoff-prep`)
 
 Each stage's artifacts are JSON-Schema validated before the next stage begins.

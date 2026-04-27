@@ -58,11 +58,34 @@ Do not proceed to the next stage until the user explicitly confirms.
    - Update `STATUS.md` → `state: spec-ready, last_stage: 02-design-spec`.
    - **If `confirmBeforeStages: true`:** pause here. This is the critical review gate — the user should read `02-brief.md` and `02-design-spec.md` and confirm the design direction before any code is written. Make this explicit in the prompt.
 
+2.5. **Stage 2.5 — Design Explore** (diverge pass)
+   - Invoke the `design-explore` skill with the locked spec as input.
+   - The skill generates 2-3 lightweight design directions that challenge and extend the brief — each with a distinct layout/interaction pattern, named DS components, and a trade-off summary.
+   - If the active stack profile has a `design-explore` command, dispatch to it to build cheap throwaway implementations in the browser (real DS components, no tests, no polish).
+   - Output: `<project-path>/02.5-design-explore.md` with all options and (after user picks) `## Chosen Direction`.
+   - **Always pause here** regardless of `confirmBeforeStages` — direction selection requires human judgment. Ask: "Which direction (or hybrid) should we take into prototyping? You can also say 'revise the brief first'."
+   - Record the chosen direction and any brief modifications in `02.5-design-explore.md`.
+   - Delete `explorations/` throwaway files after direction is chosen.
+   - Update `STATUS.md` → `state: explore-done, last_stage: 02.5-design-explore`.
+
 3. **Stage 3 — Prototype** (dispatched to stack profile)
    - Read `design-kit.config.json` → `stackProfile`.
+   - Pass the chosen direction from `02.5-design-explore.md` as context.
    - Invoke `/design-kit-{stackProfile}:prototype <project-path>`.
    - The stack profile updates `STATUS.md` → `state: prototype-ready, last_stage: 03-prototype`.
-   - **If `confirmBeforeStages: true`:** pause here. Ask user to review the prototype before Stage 4.
+   - **If `confirmBeforeStages: true`:** pause here. Ask user to review the prototype before Stage 3.5.
+
+3.5. **Stage 3.5 — Design Iterate** (stakeholder review loop)
+   - Run `design-qa` automatically on the prototype URL (if available).
+   - **Always pause here** regardless of `confirmBeforeStages` — stakeholder sign-off is required before handoff.
+   - Present the design-qa report and ask: "Share stakeholder feedback, or confirm sign-off to proceed to handoff prep."
+   - If feedback is provided:
+     - Log it in `STATUS.md` under `## Iteration Log` with date and summary.
+     - Invoke the relevant agents to address the feedback (ux-designer, design-engineer, qa-designer).
+     - Re-run `design-qa` after fixes.
+     - Pause again: "Changes made. Ready to proceed, or more revisions needed?"
+     - Repeat until explicit sign-off.
+   - Update `STATUS.md` → `state: review-approved, last_stage: 03.5-design-iterate`.
 
 4. **Stage 4 — Handoff Prep** (dispatched to stack profile)
    - Invoke `/design-kit-{stackProfile}:handoff-prep <project-path>`.
@@ -73,8 +96,10 @@ Do not proceed to the next stage until the user explicitly confirms.
 If `STATUS.md` exists, resume from `last_stage` rather than starting over. The orchestrator decides:
 - `wip` → finish Stage 1 first, then check ideation
 - `wip` + `ideation: done` → skip ideation, proceed to Stage 2
-- `spec-ready` → run Stage 3
-- `prototype-ready` → run Stage 4
+- `spec-ready` → run Stage 2.5 (design explore)
+- `explore-done` → run Stage 3 (prototype)
+- `prototype-ready` → run Stage 3.5 (design iterate / stakeholder review)
+- `review-approved` → run Stage 4 (handoff prep)
 - `handed-off` → ask the user if they want to re-run anything
 
 ## Validation
