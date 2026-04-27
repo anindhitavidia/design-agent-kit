@@ -123,9 +123,9 @@ Ask each question in sequence:
 
 1. **"Where should design-kit projects live?"** (default: `design-kit/projects/`)
 
-2. **"The sprint pauses between stages so you can review artifacts before proceeding — this is on by default. Turn pauses off? (default: no)"**
-   - "no" (default) → `confirmBeforeStages: true` — keep pauses on
-   - "yes" → `confirmBeforeStages: false` — run end-to-end (CI/automated use only)
+2. **"Pause between stages for you to review artifacts before proceeding? (default: yes)"**
+   - "yes" (default) → `confirmBeforeStages: true` — sprint waits for your confirmation at each stage
+   - "no" → `confirmBeforeStages: false` — runs end-to-end without stopping (CI/automated use only)
 
 3. **"Locale for outputs?"** (default: `en`)
 
