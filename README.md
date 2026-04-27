@@ -6,19 +6,27 @@ A Claude Code plugin marketplace for design agents and orchestration. Ships a st
 
 | Plugin | Provides |
 |---|---|
-| `design-kit` | 9 design agents, 7 skills, 13 commands, init scaffolding, 5 JSON Schemas, session-start hook |
-| `design-kit-react-nextjs` | 8 skills, 5 commands implementing the prototype/handoff-prep contract |
+| `design-kit` | 9 design agents, 8 skills, 13 commands, init scaffolding, 5 JSON Schemas, session-start hook |
+| `design-kit-react-nextjs` | 8 skills, 6 commands — React/Next.js prototype + shadcn/ui setup |
+| `design-kit-html` | 4 commands — self-contained HTML + Tailwind CDN + Alpine.js, no build step |
 
 ## Quick start
 
 ```bash
-# In Claude Code:
+# In Claude Code — pick one stack profile:
+
+# React/Next.js (full stack, shadcn/ui)
 /plugin marketplace add anindhitavidia/design-agent-kit
 /plugin install design-kit@design-agent-kit
 /plugin install design-kit-react-nextjs@design-agent-kit
 
+# HTML-only (no build, open in browser — good for quick prototyping)
+/plugin marketplace add anindhitavidia/design-agent-kit
+/plugin install design-kit@design-agent-kit
+/plugin install design-kit-html@design-agent-kit
+
 # In your repo:
-/design-kit:init
+/design-kit:init          # sets up config, context files, and runs stack-specific setup
 /design-kit:design-sprint <project-name>
 ```
 
