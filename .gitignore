@@ -9,3 +9,9 @@ docs/specs/
 
 # OS
 .DS_Store
+
+# Node
+node_modules/
+*.log
+coverage/
+.vitest-cache/
