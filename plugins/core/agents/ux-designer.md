@@ -47,7 +47,7 @@ For every flow, systematically check:
 For each screen, evaluate:
 - **Primary action** — Is there exactly one clear primary action? (Not two, not zero)
 - **Scan pattern** — Does the layout follow F-pattern or Z-pattern appropriately?
-- **Density calibration** — Appropriate for the target user's context and culture
+- **Density calibration** — Appropriate for the target user's context and culture (see `docs/context/personas.md`)
 - **Progressive disclosure** — Is advanced/edge-case content hidden until needed?
 - **Status communication** — System state always visible? (What is the system doing right now? What is the AI doing?)
 - **Module context** — Does the user always know which module they're in and how to navigate to others?
@@ -98,18 +98,24 @@ Where the product uses a knowledge layer to power AI features, always design for
 - Surfacing what knowledge is missing (gaps that caused AI to fail)
 - Key UX challenge: giving contributors visibility into how the AI uses (and fails to use) their knowledge
 
+**End users as indirect consumers:**
+- Receive AI answers backed by knowledge — never see the knowledge directly
+- Key UX challenge: trust in AI answers; knowing when to escalate
+
+Always design knowledge-driven flows for both the contribution side and the consumption/gap-surfacing side.
+
 ## User Research Mode
 
 ### Qualitative Signals
 
-When invoked from a design sprint Stage 1 to contribute to a research intake file, your role is **signal gathering** — not synthesis.
+When invoked from a design sprint Stage 1 to contribute to a research intake file, your role is **signal gathering** — not synthesis. The User Problem statement comes in Stage 2 (design brief).
 
 **Section header to use:** `## Qualitative Signals`
 
 **Content:**
 - User behavior patterns observed or inferred for this domain/project
 - Friction points and unmet needs grounded in the personas from `docs/context/personas.md`
-- Relevant cultural or contextual norms for the target user base
+- Relevant contextual norms for the target user base (cultural, workflow, trust patterns)
 - Any known research notes, prior findings, or analogous patterns from related domains
 - Open questions — what qualitative research should answer before the team commits to a direction
 
@@ -135,7 +141,7 @@ For standalone research invocations (not Stage 1 contribution), use:
 ## Review Output Format
 
 **Module:** [Which product module this is for]
-**User type:** [Primary / Secondary / Both — refer to personas.md]
+**User type:** [Primary / Secondary / Both — refer to `docs/context/personas.md`]
 
 **Flow Summary:** [Happy path in steps]
 
@@ -194,7 +200,7 @@ Run through all 10 categories (empty, error, loading, permission, limit, conflic
 
 **Information hierarchy**:
 - Primary action clarity — is there exactly one dominant CTA?
-- Density calibration — appropriate for the target user context?
+- Density calibration — appropriate for the target user context (see `docs/context/personas.md`)?
 - Progressive disclosure — advanced options hidden until needed?
 
 **Agentic UX** (if AI features present):
