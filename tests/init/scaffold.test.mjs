@@ -17,7 +17,7 @@ describe('scaffold', () => {
 
   it('writes all 8 templates into a clean repo', () => {
     const result = scaffold({ targetRoot: tmp });
-    expect(result.created.length).toBe(8);
+    expect(result.created.length).toBe(9);
     expect(existsSync(join(tmp, 'design-kit.config.json'))).toBe(true);
     expect(existsSync(join(tmp, 'DESIGN.md'))).toBe(true);
     expect(existsSync(join(tmp, 'REVIEW.md'))).toBe(true);

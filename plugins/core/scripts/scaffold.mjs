@@ -10,6 +10,7 @@ const TEMPLATE_FILES = [
   'REVIEW.md',
   'CODING_GUIDELINES.md',
   'design-kit.config.json',
+  'docs/context/product.md',
   'docs/context/brand.md',
   'docs/context/design-system.md',
   'docs/context/personas.md',

@@ -18,7 +18,7 @@ describe('e2e: artifact contract integrity', () => {
 
   it('init scaffolds a working repo', () => {
     const result = scaffold({ targetRoot: tmp });
-    expect(result.created.length).toBe(8);
+    expect(result.created.length).toBe(9);
     const config = JSON.parse(readFileSync(join(tmp, 'design-kit.config.json'), 'utf8'));
     expect(config.schemaVersion).toBe(1);
     expect(config.stackProfile).toBe('react-nextjs');
