@@ -34,10 +34,21 @@ Do not proceed to the next stage until the user explicitly confirms.
      - `"off"` — skip market researcher entirely.
      - `"light"` — invoke `market-researcher` in Stage 1 Contribution Mode (training knowledge only, no web search, 200 words max).
      - `"full"` — invoke `market-researcher` with web search enabled for current competitive data.
+   - Invoke `ux-designer` in **research mode** (qualitative signals only — not full design work):
+     > "Contribute the Qualitative Signals section to `01-data-intent.md` for [project]. Focus on persona-grounded observations and user signals. This is research intake, not a full UX analysis — that comes in Stage 2."
    - Output: `<project-path>/01-data-intent.md` with R fields `stage: 1, project, intent_statement`.
    - Validate against `01-data-intent.schema.json`.
    - Update `STATUS.md` → `state: wip, last_stage: 01-data-intent`.
-   - **If `confirmBeforeStages: true`:** pause here. Ask user to review `01-data-intent.md` before Stage 2.
+   - **If `confirmBeforeStages: true`:** pause here. Ask user to review `01-data-intent.md` before continuing.
+
+1.5. **Stage 1.5 — Ideation** (optional)
+   - After Stage 1 pause is confirmed, ask once: "Want to explore design directions before writing the brief? Useful for complex or ambiguous projects. (brainstorm / skip to brief)"
+   - If the sprint's `STATUS.md` has `ideation: done`, skip without asking.
+   - **If brainstorm:** invoke the `brainstorming-design` skill with this context:
+     > "We're exploring design directions for [project]. Research intake is at `01-data-intent.md` — read it for signals and competitive context. Explore the problem space, challenge assumptions, surface non-obvious directions, and help decide which approach to take before committing to a design brief."
+     When brainstorming concludes, write `ideation: done` to `STATUS.md`.
+     **If `confirmBeforeStages: true`:** pause here. Ask user to review explored directions before Stage 2.
+   - **If skip:** proceed directly to Stage 2.
 
 2. **Stage 2 — Design Brief**
    - Use `ux-designer` agent for user flows and edge cases.
@@ -60,7 +71,8 @@ Do not proceed to the next stage until the user explicitly confirms.
 ## Resume logic
 
 If `STATUS.md` exists, resume from `last_stage` rather than starting over. The orchestrator decides:
-- `wip` → finish Stage 1 first
+- `wip` → finish Stage 1 first, then check ideation
+- `wip` + `ideation: done` → skip ideation, proceed to Stage 2
 - `spec-ready` → run Stage 3
 - `prototype-ready` → run Stage 4
 - `handed-off` → ask the user if they want to re-run anything
