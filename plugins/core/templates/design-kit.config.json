@@ -1,0 +1,14 @@
+{
+  "$schema": "https://github.com/anindhitavidia/design-agent-kit/schemas/config-v1.json",
+  "schemaVersion": 1,
+  "stackProfile": "react-nextjs",
+  "projectRoot": "design-kit/projects",
+  "contextPaths": {
+    "brand": "docs/context/brand.md",
+    "designSystem": "docs/context/design-system.md",
+    "personas": "docs/context/personas.md",
+    "codingRules": "docs/context/coding-rules.md"
+  },
+  "locale": "en",
+  "confirmBeforeStages": false
+}

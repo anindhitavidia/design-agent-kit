@@ -1,0 +1,24 @@
+{
+  "$id": "https://design-agent-kit/schemas/v1/design-spec.schema.json",
+  "title": "02-design-spec.md frontmatter",
+  "type": "object",
+  "required": ["stage", "project", "layout_pattern", "components_needed"],
+  "properties": {
+    "stage": { "const": 2 },
+    "project": { "type": "string", "minLength": 1 },
+    "layout_pattern": {
+      "type": "string",
+      "enum": ["form", "dashboard", "list-detail", "settings", "wizard", "modal", "table", "chart-heavy", "other"]
+    },
+    "components_needed": {
+      "type": "array",
+      "items": { "type": "string" },
+      "minItems": 1
+    },
+    "new_components": { "type": "array", "items": { "type": "string" } },
+    "interactions": { "type": "array", "items": { "type": "string" } },
+    "states": { "type": "array", "items": { "type": "string" } },
+    "data_dependencies": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

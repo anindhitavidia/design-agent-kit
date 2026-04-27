@@ -1,0 +1,21 @@
+{
+  "$id": "https://design-agent-kit/schemas/v1/status.schema.json",
+  "title": "STATUS.md frontmatter",
+  "type": "object",
+  "required": ["state", "last_stage"],
+  "properties": {
+    "state": {
+      "type": "string",
+      "enum": ["wip", "spec-ready", "prototype-ready", "handed-off"]
+    },
+    "last_stage": {
+      "type": "string",
+      "enum": ["01-data-intent", "02-brief", "02-design-spec", "03-prototype", "04-handoff"]
+    },
+    "last_run": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "additionalProperties": false
+}

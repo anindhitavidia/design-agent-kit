@@ -1,0 +1,23 @@
+{
+  "name": "design-agent-kit",
+  "version": "0.0.0",
+  "description": "Claude Code plugin marketplace for design agents and orchestration",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:schemas": "vitest run tests/schemas",
+    "test:init": "vitest run tests/init",
+    "test:smoke": "vitest run tests/smoke",
+    "validate:marketplace": "node scripts/validate-marketplace.mjs"
+  },
+  "devDependencies": {
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "vitest": "^2.1.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

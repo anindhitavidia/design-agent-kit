@@ -1,0 +1,9 @@
+{
+  "name": "design-kit",
+  "description": "Core design agents and design-sprint orchestration. Stack-agnostic; pair with a stack profile (e.g. design-kit-react-nextjs).",
+  "version": "0.1.0",
+  "author": {
+    "name": "anindhitavidia"
+  },
+  "keywords": ["design", "ux", "design-sprint", "brand-audit", "design-system"]
+}

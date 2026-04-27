@@ -1,0 +1,17 @@
+# Local design specs / brainstorming notes (kept out of public history)
+docs/specs/
+
+# Workspace
+.context/
+
+# Worktrees
+.worktrees/
+
+# OS
+.DS_Store
+
+# Node
+node_modules/
+*.log
+coverage/
+.vitest-cache/

@@ -1,0 +1,14 @@
+{
+  "$id": "https://design-agent-kit/schemas/v1/data-intent.schema.json",
+  "title": "01-data-intent.md frontmatter",
+  "type": "object",
+  "required": ["stage", "project", "intent_statement"],
+  "properties": {
+    "stage": { "const": 1 },
+    "project": { "type": "string", "minLength": 1 },
+    "intent_statement": { "type": "string", "minLength": 1 },
+    "data_sources": { "type": "array", "items": { "type": "string" } },
+    "key_metrics": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}
