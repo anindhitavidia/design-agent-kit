@@ -24,8 +24,8 @@ Check installed `design-kit-*` plugins via `/plugin list` (or `~/.claude/plugins
 >
 > Which would you like? (1 / 2 / 3)
 
-- For option 1 or 2: run `/plugin install design-kit-{profile}@design-agent-kit`.
-  - **After installing:** Claude Code requires a plugin reload before the new commands are active. Tell the user:
+- For option 1 or 2: **immediately run** `/plugin install design-kit-{profile}@design-agent-kit` — do not ask the user to run it themselves.
+  - After the install completes, Claude Code requires a plugin reload before the new commands are active. Tell the user:
     > "Plugin installed! Run `/reload-plugins` to activate it, then re-run `/design-kit:init` to continue. Setup will pick up from Step 3 — steps 1 and 2 will be skipped automatically."
   - **Stop here.** Do not proceed to Step 3 in the same session after a fresh install.
 - For option 3: note in config that `stackProfile` is unset; warn that Stages 3–4 will be skipped. Proceed to Step 3.
