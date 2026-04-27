@@ -12,14 +12,14 @@
   "plugins": [
     {
       "name": "design-kit",
-      "source": "core",
+      "source": "./plugins/core",
       "description": "Core design agents, skills, and design-sprint orchestration. Stack-agnostic.",
       "category": "design",
       "tags": ["design", "ux", "design-system", "orchestration"]
     },
     {
       "name": "design-kit-react-nextjs",
-      "source": "react-nextjs",
+      "source": "./plugins/react-nextjs",
       "description": "React + Next.js stack profile for design-kit. Adds frontend-design, prototype, and handoff-prep.",
       "category": "design",
       "tags": ["design", "react", "nextjs", "tailwind"]

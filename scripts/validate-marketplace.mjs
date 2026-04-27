@@ -16,8 +16,6 @@ if (!marketplace.name) errors.push('marketplace.name is required');
 if (!marketplace.owner?.name) errors.push('marketplace.owner.name is required');
 if (!Array.isArray(marketplace.plugins)) errors.push('marketplace.plugins must be an array');
 
-const pluginRoot = marketplace.metadata?.pluginRoot || '.';
-
 for (const plugin of marketplace.plugins ?? []) {
   if (!plugin.name) {
     errors.push(`plugin missing name: ${JSON.stringify(plugin)}`);
@@ -28,7 +26,7 @@ for (const plugin of marketplace.plugins ?? []) {
     continue;
   }
   if (typeof plugin.source !== 'string') continue;
-  const pluginDir = resolve(root, pluginRoot, plugin.source);
+  const pluginDir = resolve(root, plugin.source);
   const manifestPath = join(pluginDir, '.claude-plugin', 'plugin.json');
   if (!existsSync(manifestPath)) {
     errors.push(`plugin ${plugin.name}: manifest missing at ${manifestPath}`);
