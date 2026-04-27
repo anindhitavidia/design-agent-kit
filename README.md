@@ -6,8 +6,8 @@ A Claude Code plugin marketplace for design agents and orchestration. Ships a st
 
 | Plugin | Provides |
 |---|---|
-| `design-kit` | 8 design agents, 6 skills, 10 commands, init scaffolding, 5 JSON Schemas, session-start hook |
-| `design-kit-react-nextjs` | 8 skills, 4 commands implementing the prototype/handoff-prep contract |
+| `design-kit` | 9 design agents, 7 skills, 13 commands, init scaffolding, 5 JSON Schemas, session-start hook |
+| `design-kit-react-nextjs` | 8 skills, 5 commands implementing the prototype/handoff-prep contract |
 
 ## Quick start
 
@@ -26,7 +26,7 @@ A Claude Code plugin marketplace for design agents and orchestration. Ships a st
 
 `/design-kit:design-sprint` runs a 4-stage pipeline:
 
-1. **Data & Intent** — `data-analyst` + `market-researcher` agents produce `01-data-intent.md`
+1. **Data & Intent** — `data-analyst` + `market-researcher` agents produce `01-data-intent.md`; use `data-viz-engineer` for data-heavy features
 2. **Design Brief** — `ux-designer` + `product-designer` agents produce `02-brief.md` + `02-design-spec.md`
 3. **Prototype** — dispatched to the active stack profile (`design-kit-react-nextjs:prototype`)
 4. **Handoff Prep** — dispatched to the active stack profile (`design-kit-react-nextjs:handoff-prep`)
@@ -76,6 +76,9 @@ See [docs/architecture.md](docs/architecture.md) for the full contract.
 | `/design-kit:design-qa <url>` | Visual + a11y + perf QA on a URL |
 | `/design-kit:brand-audit [path]` | Brand consistency audit |
 | `/design-kit:component-review <name>` | Component readiness audit |
+| `/design-kit:review-component <name>` | QA automation with auto-fix loop |
+| `/design-kit:data-insights` | Pull analytics and generate design insights |
+| `/design-kit:design-spec <project>` | Generate post-prototype engineering spec |
 | `/design-kit:release-notes` | Changelog from recent changes |
 | `/design-kit:lint <project>` | Non-blocking G-tier artifact validation |
 
@@ -87,6 +90,7 @@ See [docs/architecture.md](docs/architecture.md) for the full contract.
 | `/design-kit-react-nextjs:handoff-prep <project>` | Stage 4 — package for handoff |
 | `/design-kit-react-nextjs:build-component <name>` | Build a standalone DS component |
 | `/design-kit-react-nextjs:e2e-scaffold <project>` | Scaffold Playwright e2e tests |
+| `/design-kit-react-nextjs:data-viz <project>` | Build data visualization / dashboard prototype |
 
 ## Contributing
 
