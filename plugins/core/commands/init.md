@@ -24,14 +24,23 @@ Check installed `design-kit-*` plugins via `/plugin list` (or `~/.claude/plugins
 >
 > Which would you like? (1 / 2 / 3)
 
-- For option 1 or 2: run `/plugin install design-kit-{profile}@design-agent-kit` then proceed.
-- For option 3: note in config that `stackProfile` is unset; warn that Stages 3–4 will be skipped.
+- For option 1 or 2: run `/plugin install design-kit-{profile}@design-agent-kit`.
+  - **After installing:** Claude Code requires a plugin reload before the new commands are active. Tell the user:
+    > "Plugin installed! Run `/reload-plugins` to activate it, then re-run `/design-kit:init` to continue. Setup will pick up from Step 3 — steps 1 and 2 will be skipped automatically."
+  - **Stop here.** Do not proceed to Step 3 in the same session after a fresh install.
+- For option 3: note in config that `stackProfile` is unset; warn that Stages 3–4 will be skipped. Proceed to Step 3.
 
 ---
 
 ## Step 2 — Run stack-specific setup
 
-If a stack profile was selected, invoke `/design-kit-{stackProfile}:setup` now. This installs prerequisites (e.g. shadcn/ui for react-nextjs) before the first sprint, so nothing interrupts mid-prototype.
+**Skip this step if the stack profile was just installed in Step 1** (user is re-running init after `/reload-plugins` — the profile is now active).
+
+If a stack profile is active and has a `setup` command, invoke `/design-kit-{stackProfile}:setup` now.
+
+- **react-nextjs**: checks for Next.js, shadcn/ui, and Tailwind; installs shadcn if missing.
+- **html**: no prerequisites — confirm the CDN-only approach and proceed.
+- **Unknown profile**: skip silently.
 
 ---
 
