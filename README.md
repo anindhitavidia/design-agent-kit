@@ -6,29 +6,40 @@ A Claude Code plugin marketplace for design agents and orchestration. Ships a st
 
 | Plugin | Provides |
 |---|---|
-| `design-kit` | 9 design agents, 7 skills, 13 commands, init scaffolding, 5 JSON Schemas, session-start hook |
-| `design-kit-react-nextjs` | 8 skills, 5 commands implementing the prototype/handoff-prep contract |
+| `design-kit` | 9 design agents, 8 skills, 13 commands, init scaffolding, 5 JSON Schemas, session-start hook |
+| `design-kit-react-nextjs` | 8 skills, 6 commands — React/Next.js prototype + shadcn/ui setup |
+| `design-kit-html` | 4 commands — self-contained HTML + Tailwind CDN + Alpine.js, no build step |
 
 ## Quick start
 
 ```bash
-# In Claude Code:
+# In Claude Code — pick one stack profile:
+
+# React/Next.js (full stack, shadcn/ui)
 /plugin marketplace add anindhitavidia/design-agent-kit
 /plugin install design-kit@design-agent-kit
 /plugin install design-kit-react-nextjs@design-agent-kit
 
+# HTML-only (no build, open in browser — good for quick prototyping)
+/plugin marketplace add anindhitavidia/design-agent-kit
+/plugin install design-kit@design-agent-kit
+/plugin install design-kit-html@design-agent-kit
+
 # In your repo:
-/design-kit:init
+/design-kit:init          # sets up config, context files, and runs stack-specific setup
 /design-kit:design-sprint <project-name>
 ```
 
 ## The design sprint pipeline
 
-`/design-kit:design-sprint` runs a 4-stage pipeline:
+`/design-kit:design-sprint` runs a 7-stage pipeline with human review pauses between every stage:
 
-1. **Data & Intent** — `data-analyst` + `market-researcher` agents produce `01-data-intent.md`; use `data-viz-engineer` for data-heavy features
-2. **Design Brief** — `ux-designer` + `product-designer` agents produce `02-brief.md` + `02-design-spec.md`
+1. **Data & Intent** — `data-analyst` + `ux-designer` (qualitative signals) + `market-researcher` produce `01-data-intent.md`
+1.5. **Ideation** *(optional)* — `brainstorming-design` skill explores problem space before locking in direction
+2. **Design Brief** — `ux-designer` + `product-designer` produce `02-brief.md` + `02-design-spec.md`
+2.5. **Design Explore** — `design-explore` skill generates 2-3 lightweight directions that challenge the brief; stack profile builds cheap DS-component sketches; user picks one direction before any prototype code is written
 3. **Prototype** — dispatched to the active stack profile (`design-kit-react-nextjs:prototype`)
+3.5. **Design Iterate** — automated `design-qa` run + mandatory stakeholder review pause; iterates until sign-off
 4. **Handoff Prep** — dispatched to the active stack profile (`design-kit-react-nextjs:handoff-prep`)
 
 Each stage's artifacts are JSON-Schema validated before the next stage begins.
@@ -58,7 +69,7 @@ Key config options:
 | Field | Default | Description |
 |---|---|---|
 | `stackProfile` | `"react-nextjs"` | Which stack profile plugin to dispatch Stage 3 & 4 to |
-| `confirmBeforeStages` | `false` | Pause and confirm before each sprint stage runs |
+| `confirmBeforeStages` | `true` | Pause for human review between every stage. Set to `false` only for automated/CI runs |
 | `marketResearch` | `"light"` | `"light"` = training knowledge only (token-efficient); `"full"` = web search enabled; `"off"` = skip |
 
 ## Updating

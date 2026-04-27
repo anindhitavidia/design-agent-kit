@@ -1,0 +1,9 @@
+{
+  "name": "design-kit-html",
+  "description": "HTML stack profile for design-kit. Outputs self-contained HTML + Tailwind CDN + Alpine.js prototypes — no build step, no deployment. Open in browser directly.",
+  "version": "0.1.0",
+  "author": {
+    "name": "anindhitavidia"
+  },
+  "keywords": ["design", "html", "prototype", "no-build", "tailwind"]
+}

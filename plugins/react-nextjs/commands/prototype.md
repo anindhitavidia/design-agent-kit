@@ -80,6 +80,35 @@ Follow all standards from `docs/context/design-system.md`:
 - Apply design tokens (no hardcoded colors, spacing, or typography)
 - Wire into any domain index page if the project structure requires it
 
+### 5a. Accessibility — non-negotiable rules
+
+Apply these during generation. Do not defer to QA.
+
+**Colour contrast:**
+- Body and label text: always use semantic colour tokens from `docs/context/design-system.md` — never raw Tailwind grays like `text-gray-400` or lighter
+- Secondary/muted text: use the DS muted token (e.g. `text-muted-foreground`) — confirm it meets WCAG AA (4.5:1) against its background. If unsure, go one shade darker.
+- Never convey meaning through colour alone — pair with icon or label
+
+**Interactive elements:**
+- Every button must have visible text or an `aria-label`
+- Icon-only buttons: always `aria-label="..."`
+- Form fields: always paired with `<label>` — use the DS `Field` or `FormField` wrapper
+- Do not remove focus rings (`outline-none` without a visible replacement is a violation)
+
+**ARIA:**
+- Modals: `role="dialog"` + `aria-modal="true"` + focus trap
+- Status/alert messages: `role="alert"` or `aria-live="polite"`
+- Loading states: `aria-busy="true"` on the container
+
+### 5b. Dark mode
+
+Wire dark mode from the start — do not leave it as a follow-up task.
+
+- Use the DS token system — if tokens use CSS custom properties or the DS `dark:` variant, they adapt automatically
+- Tailwind dark mode: use `dark:` variant classes where the DS doesn't provide a semantic token
+- Ensure `next-themes` (or equivalent) is configured if the project uses it; otherwise use the `class` strategy on `<html>`
+- Background hierarchy must be preserved in dark mode: page surface → card surface → overlay
+
 ### 5b. Wire into domain index (if applicable)
 
 If the project folder sits within a multi-project domain structure, wire the prototype route

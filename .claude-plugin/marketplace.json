@@ -23,6 +23,13 @@
       "description": "React + Next.js stack profile for design-kit. Adds frontend-design, prototype, and handoff-prep.",
       "category": "design",
       "tags": ["design", "react", "nextjs", "tailwind"]
+    },
+    {
+      "name": "design-kit-html",
+      "source": "./plugins/html",
+      "description": "HTML stack profile for design-kit. Self-contained HTML + Tailwind CDN + Alpine.js prototypes — no build step, no deployment. Open in browser directly.",
+      "category": "design",
+      "tags": ["design", "html", "prototype", "no-build", "tailwind"]
     }
   ]
 }

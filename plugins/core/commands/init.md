@@ -14,9 +14,14 @@ Set up design-kit in the current repo.
    - If multiple, ask which.
    - If none, warn: "Stage 3 and Stage 4 of the design sprint won't run end-to-end without a stack profile. Continue with discovery-only mode?" Proceed if user confirms.
 
+1b. **Run stack-specific setup.**
+   - If a stack profile was selected and it has a `setup` command, invoke `/design-kit-{stackProfile}:setup` now.
+   - This installs and configures any stack prerequisites (e.g. shadcn/ui for react-nextjs) before the first sprint runs, so setup interruptions don't happen mid-prototype.
+   - If the setup command doesn't exist for the selected profile, skip silently.
+
 2. **Ask setup questions:**
    - "Where should design-kit projects live?" (default: `design-kit/projects/`)
-   - "Pause and confirm before each sprint stage runs?" (default: no)
+   - "The sprint pauses between stages for you to review artifacts before proceeding — this is the recommended default. Disable pauses only for automated/CI runs. Skip pauses? (default: no)"
    - "Locale for outputs?" (default: `en`)
    - "Market research depth during sprints? `light` uses training knowledge only (token-efficient, default). `full` enables web search for current competitive data. `off` skips it." (default: `light`)
    - "Append a 'Design Kit' section to existing CLAUDE.md, or create one?"
