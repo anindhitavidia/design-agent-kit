@@ -108,7 +108,7 @@ git commit -m "feat([ComponentName]): build from [Figma + Design Rules | Shadcn 
 
 Tell the user: "Build complete. Running QA review..."
 
-Now run the component QA procedure:
+Now run the `/review-component [ComponentName]` procedure:
 
 - Load `plugins/react-nextjs/skills/component-qa/SKILL.md`
 - Run initial QA (automated checks + code quality + engineering readiness)
@@ -116,7 +116,14 @@ Now run the component QA procedure:
 - Generate QA_REPORT.md in the component folder
 - Present results
 
-### 8. Present final results
+The review-component procedure handles its own commit of QA fixes and report.
+
+### 8. Run code review
+
+Load `.claude/skills/code-reviewer/SKILL.md` (if available) and review the component files.
+Auto-fix any Critical findings. Include Important/Advisory findings in the final results.
+
+### 9. Present final results
 
 **Track A — QA passed clean:**
 > "Built and reviewed **[ComponentName]**. Zero issues found.
