@@ -1,0 +1,16 @@
+{
+  "$id": "https://design-agent-kit/schemas/v1/brief.schema.json",
+  "title": "02-brief.md frontmatter",
+  "type": "object",
+  "required": ["stage", "project", "problem", "target_users"],
+  "properties": {
+    "stage": { "const": 2 },
+    "project": { "type": "string", "minLength": 1 },
+    "problem": { "type": "string", "minLength": 1 },
+    "target_users": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+    "success_criteria": { "type": "array", "items": { "type": "string" } },
+    "constraints": { "type": "array", "items": { "type": "string" } },
+    "out_of_scope": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}
