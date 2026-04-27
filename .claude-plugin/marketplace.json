@@ -1,0 +1,28 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "design-agent-kit",
+  "description": "Reusable design agents and orchestration: design sprints, brand audits, and stack-aware prototyping for Claude Code",
+  "owner": {
+    "name": "anindhitavidia"
+  },
+  "metadata": {
+    "version": "0.1.0",
+    "pluginRoot": "./plugins"
+  },
+  "plugins": [
+    {
+      "name": "design-kit",
+      "source": "core",
+      "description": "Core design agents, skills, and design-sprint orchestration. Stack-agnostic.",
+      "category": "design",
+      "tags": ["design", "ux", "design-system", "orchestration"]
+    },
+    {
+      "name": "design-kit-react-nextjs",
+      "source": "react-nextjs",
+      "description": "React + Next.js stack profile for design-kit. Adds frontend-design, prototype, and handoff-prep.",
+      "category": "design",
+      "tags": ["design", "react", "nextjs", "tailwind"]
+    }
+  ]
+}
