@@ -53,6 +53,27 @@ Each stage's artifacts are JSON-Schema validated before the next stage begins.
 
 Fill in the context files with your brand, design system, and persona details. Agents read them at runtime.
 
+Key config options:
+
+| Field | Default | Description |
+|---|---|---|
+| `stackProfile` | `"react-nextjs"` | Which stack profile plugin to dispatch Stage 3 & 4 to |
+| `confirmBeforeStages` | `false` | Pause and confirm before each sprint stage runs |
+| `marketResearch` | `"light"` | `"light"` = training knowledge only (token-efficient); `"full"` = web search enabled; `"off"` = skip |
+
+## Updating
+
+Claude Code doesn't auto-update plugins. To get the latest agents, skills, and commands:
+
+```bash
+/plugin marketplace remove design-agent-kit
+/plugin marketplace add anindhitavidia/design-agent-kit
+/plugin install design-kit@design-agent-kit
+/plugin install design-kit-react-nextjs@design-agent-kit
+```
+
+Your repo files (`design-kit.config.json`, `docs/context/`, `DESIGN.md`, etc.) are never touched by a reinstall — only the plugin cache is replaced. If a new version adds config options you want (check the [CHANGELOG](CHANGELOG.md)), add them to your `design-kit.config.json` manually.
+
 ## Authoring a stack profile
 
 A stack profile is a second Claude Code plugin that implements two required commands:
