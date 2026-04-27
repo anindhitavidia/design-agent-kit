@@ -138,13 +138,22 @@ Ask each question in sequence:
 
 ---
 
-## Step 7 — Scaffold
+## Step 7 — Scaffold remaining files
 
-Run the scaffold script with collected config (skips files already written in Steps 3–5):
+For each file below that does **not** already exist at the target root, read the template from this plugin's `templates/` directory and write it to the target. Do not overwrite files already created in Steps 3–5.
 
-```bash
-node plugins/core/scripts/scaffold.mjs --target . --config <collected-config>
-```
+| Template | Target |
+|---|---|
+| `templates/DESIGN.md` | `DESIGN.md` |
+| `templates/REVIEW.md` | `REVIEW.md` |
+| `templates/CODING_GUIDELINES.md` | `CODING_GUIDELINES.md` |
+| `templates/docs/context/personas.md` | `docs/context/personas.md` |
+| `templates/docs/context/coding-rules.md` | `docs/context/coding-rules.md` |
+| `templates/design-kit.config.json` | `design-kit.config.json` |
+
+For `design-kit.config.json`: merge the config values collected in Step 6 (projectRoot, confirmBeforeStages, locale, marketResearch, stackProfile) into the template before writing.
+
+Use the Read tool to load each template and the Write tool to write the target. Do not use bash.
 
 ---
 
