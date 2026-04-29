@@ -170,7 +170,10 @@ Do not proceed to the next stage until the user explicitly confirms.
    - Skip Stage 3. Tell the user: "discovery-only mode — no prototype stage."
 
    - Update `STATUS.md` → `state: prototype-ready, last_stage: 03-prototype`.
-   - **If `confirmBeforeStages: true`:** pause here. Ask user to review the prototype before Stage 3.5.
+   - **If `confirmBeforeStages: true`:** pause here with this exact message:
+     > "Prototype ready. Stage 3.5 will run a score-based polish pass automatically (design-iterate: up to 5 rounds, fixes one finding per round, keeps or reverts by score). No input needed from you until it finishes.
+     > Reply 'continue' to start the polish pass, or 'stop' to pause here."
+     Do NOT describe Stage 3.5 as a stakeholder review — that comes after the iterate loop completes.
 
 3.5. **Stage 3.5 — Design Iterate** (score-based polish pass, on by default)
 
