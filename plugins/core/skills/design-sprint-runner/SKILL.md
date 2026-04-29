@@ -129,11 +129,26 @@ Do not proceed to the next stage until the user explicitly confirms.
 
    If explore = no: proceed directly to Stage 3.
 
-3. **Stage 3 — Prototype** (dispatched to stack profile)
-   - Read `design-kit.config.json` → `stackProfile`.
-   - Pass the chosen direction from `02.5-design-explore.md` as context.
+3. **Stage 3 — Prototype**
+   - Read `design-kit.config.json` → `stackProfile` and `customStack`.
+   - Pass the chosen direction from `02.5-design-explore.md` (if Stage 2.5 ran) as context.
+
+   **If `stackProfile` is `react-nextjs` or `html`:**
    - Invoke `/design-kit-{stackProfile}:prototype <project-path>`.
-   - The stack profile updates `STATUS.md` → `state: prototype-ready, last_stage: 03-prototype`.
+
+   **If `stackProfile` is `custom`:**
+   - Read `docs/context/design-system.md` (framework, component library, import paths),
+     `docs/context/coding-rules.md` (conventions), and the design brief.
+   - Invoke the `design-engineer` agent directly. The agent generates the prototype into the
+     project directory using the user's existing stack — no new framework scaffolding, no CDN
+     boilerplate. Component imports use the paths from `docs/context/design-system.md`.
+   - The prototype output structure follows the existing codebase conventions inferred from
+     `docs/context/coding-rules.md` and any existing files in the project.
+
+   **If `stackProfile` is `null` (discovery-only):**
+   - Skip Stage 3. Tell the user: "discovery-only mode — no prototype stage."
+
+   - Update `STATUS.md` → `state: prototype-ready, last_stage: 03-prototype`.
    - **If `confirmBeforeStages: true`:** pause here. Ask user to review the prototype before Stage 3.5.
 
 3.5. **Stage 3.5 — Design Iterate** (score-based polish pass, on by default)
@@ -160,9 +175,19 @@ Do not proceed to the next stage until the user explicitly confirms.
    5. Wait for explicit stakeholder sign-off. Do NOT auto-proceed to Stage 4.
    6. Update `STATUS.md` → `state: review-approved, last_stage: 03.5-design-iterate`.
 
-4. **Stage 4 — Handoff Prep** (dispatched to stack profile)
+4. **Stage 4 — Handoff Prep**
+   **If `stackProfile` is `react-nextjs` or `html`:**
    - Invoke `/design-kit-{stackProfile}:handoff-prep <project-path>`.
-   - The stack profile writes `04-handoff/` and updates `STATUS.md` → `state: handed-off`.
+
+   **If `stackProfile` is `custom`:**
+   - Invoke the core `/design-kit:handoff-prep <project-path>` command directly.
+     This runs design-spec, e2e-scaffold, design-qa, and assembles `HANDOFF.md` — all
+     stack-agnostic steps that work against any prototype.
+
+   **If `stackProfile` is `null` (discovery-only):**
+   - Skip Stage 4. Tell the user: "discovery-only mode — no handoff stage."
+
+   - The stack profile (or core command) writes `04-handoff/` and updates `STATUS.md` → `state: handed-off`.
 
 ## Resume logic
 

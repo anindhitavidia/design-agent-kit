@@ -8,48 +8,110 @@ Set up design-kit in the current repo. Work through each step in order — do no
 
 ---
 
-## Step 1 — Choose a stack profile
+## Step 1 — Detect tech stack and choose a profile
+
+### 1a. Auto-detect the existing tech stack
+
+Before presenting options, silently read the project to understand what's already here.
+
+**Read `package.json`** (if present). Look for:
+
+| Signal | Detected stack |
+|---|---|
+| `next` in dependencies | Next.js |
+| `react` (without `next`) | React (Vite / CRA / other) |
+| `vue` or `nuxt` | Vue / Nuxt |
+| `@angular/core` | Angular |
+| `svelte` or `@sveltejs/kit` | Svelte / SvelteKit |
+| `solid-js` | SolidJS |
+| None of the above | Unknown / static |
+
+**Check for framework config files:**
+`next.config.*` → Next.js, `nuxt.config.*` → Nuxt, `angular.json` → Angular,
+`svelte.config.*` → SvelteKit, `vite.config.*` → Vite (check deps for framework)
+
+**Detect component library** (from `package.json` dependencies):
+shadcn (`components.json` exists or `@radix-ui/*` + `class-variance-authority`), `@mui/material`,
+`@chakra-ui/*`, `vuetify`, `@mantine/*`, `daisyui`, `@headlessui/*`, `@nextui-org/*`, etc.
+
+**Detect CSS approach:**
+`tailwindcss` → Tailwind, `styled-components` / `@emotion/*` → CSS-in-JS,
+`*.module.css` files → CSS Modules, `sass` / `scss` → SASS
+
+### 1b. Check installed stack profile plugins
 
 Check installed `design-kit-*` plugins via `/plugin list` (or `~/.claude/plugins/installed_plugins.json`).
 
-**If a stack profile is already installed:** confirm it with the user. If multiple are installed, ask which to use.
+**If a matching stack profile plugin is already installed:** confirm it with the user and skip
+to Step 2. If multiple are installed, ask which to use.
 
-**If no stack profile is installed:** present the options and ask which to install:
+### 1c. Present findings and ask
 
-> "No stack profile installed. Choose one:"
+Show the user what was detected (or "nothing detected") and present the options:
+
+> "I detected **[framework] + [component library] + [CSS approach]** in this project."
+> (or: "I couldn't detect a framework — here are the options:")
 >
-> 1. **react-nextjs** — React + Next.js + shadcn/ui + Tailwind. Full production-quality prototypes. Requires an existing Next.js project.
-> 2. **html** — Self-contained HTML + DaisyUI + Tailwind CDN + Alpine.js. No build step, open in browser. Best for quick prototyping or when you don't have a Next.js project.
-> 3. **discovery-only** — Skip prototyping (Stages 3–4 won't run). Research, briefs, and specs only.
+> Choose a stack profile:
 >
-> Which would you like? (1 / 2 / 3)
+> 1. **react-nextjs** — React + Next.js + shadcn/ui + Tailwind. Full production-quality prototypes in your existing Next.js project.
+>    *(recommended — detected Next.js)*  ← only show this tag if Next.js was detected
+> 2. **html** — Self-contained HTML + DaisyUI + Tailwind CDN + Alpine.js. No build step, open in browser.
+> 3. **custom** — Use your existing stack ([detected framework + library]). Prototypes are generated directly into your codebase using your design system context.
+>    *(recommended — detected [framework])*  ← only show this tag if a non-Next.js framework was detected
+> 4. **discovery-only** — Research, briefs, and specs only. No prototype stages.
+>
+> Which would you like? (1 / 2 / 3 / 4)
 
-- For option 1 or 2: plugin install commands cannot be run from within a conversation — the user must run them in Claude Code directly. Print these instructions clearly and stop:
+**For option 1 or 2** (installable plugins): plugin install commands cannot be run from within
+a conversation — the user must run them in Claude Code directly. Print clearly and stop:
 
-  ```
-  Run these two commands in Claude Code:
+```
+Run these two commands in Claude Code:
 
-  /plugin install design-kit-[profile]@design-agent-kit
+/plugin install design-kit-[profile]@design-agent-kit
 
-  /reload-plugins
+/reload-plugins
 
-  Then re-run /design-kit:init — setup will skip Steps 1–2 and continue from Step 3.
-  ```
+Then re-run /design-kit:init — setup will skip Steps 1–2 and continue from Step 3.
+```
 
-  **Stop here.** Do not proceed further in this session.
-- For option 3: note in config that `stackProfile` is unset; warn that Stages 3–4 will be skipped. Proceed to Step 3.
+**Stop here.** Do not proceed further in this session.
+
+**For option 3 (custom):** No plugin install needed. Continue to Step 2 — the custom setup
+runs inline using the detected (or user-confirmed) stack info.
+
+**For option 4 (discovery-only):** Set `stackProfile: null` in config; warn that Stages 3–4
+will be skipped. Proceed to Step 3.
 
 ---
 
-## Step 2 — Run stack-specific setup
+## Step 2 — Stack-specific setup
 
-**Skip this step if the stack profile was just installed in Step 1** (user is re-running init after `/reload-plugins` — the profile is now active).
-
-If a stack profile is active and has a `setup` command, invoke `/design-kit-{stackProfile}:setup` now.
+**For react-nextjs or html** (re-running after `/reload-plugins`): invoke
+`/design-kit-{stackProfile}:setup`. Skip this step if the profile was just installed in Step 1.
 
 - **react-nextjs**: checks for Next.js, shadcn/ui, and Tailwind; installs shadcn if missing.
 - **html**: no prerequisites — confirm the CDN-only approach and proceed.
-- **Unknown profile**: skip silently.
+
+**For custom stack:** Confirm the detected stack with the user and capture any gaps.
+
+1. Show what was auto-detected:
+   ```
+   Detected stack:
+   - Framework: [e.g. Vue 3 / Vite]
+   - Component library: [e.g. Vuetify 3] (or "none detected")
+   - CSS: [e.g. Tailwind CSS] (or "none detected")
+   - Import path: [e.g. "vuetify/components"] (or "unknown — needs confirming")
+   ```
+2. Ask: "Does this look right? Correct anything or press enter to confirm."
+3. Ask (if component library not detected): "What component library do you use, if any? (e.g. Vuetify, MUI, Chakra, shadcn, or 'none')"
+4. Ask (if import path unknown): "What's the import path for your components? (e.g. `@acme/design-system`, `~/components/ui`)"
+5. Write the confirmed stack summary into `docs/context/design-system.md` under a
+   `## Stack` section — this becomes the agents' primary reference for code generation.
+6. Write coding conventions into `docs/context/coding-rules.md` (component naming pattern,
+   file structure conventions inferred from existing code if present).
+7. Set `stackProfile: "custom"` and `customStack: { framework, componentLibrary, importPath, css }` in `design-kit.config.json`.
 
 ---
 
@@ -154,7 +216,7 @@ For each file below that does **not** already exist at the target root, read the
 | `templates/docs/context/coding-rules.md` | `docs/context/coding-rules.md` |
 | `templates/design-kit.config.json` | `design-kit.config.json` |
 
-For `design-kit.config.json`: merge the config values collected in Step 6 (projectRoot, confirmBeforeStages, locale, marketResearch, stackProfile) into the template before writing.
+For `design-kit.config.json`: merge the config values collected in Steps 1–2 and 6 (stackProfile, customStack, projectRoot, confirmBeforeStages, locale, marketResearch) into the template before writing. For `custom` stack, set `customStack: { framework, componentLibrary, importPath, css }` from the values confirmed in Step 2.
 
 Use the Read tool to load each template and the Write tool to write the target. Do not use bash.
 
