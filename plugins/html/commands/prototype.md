@@ -8,19 +8,21 @@ Sprint Stage 3 — HTML prototype.
 
 ## Inputs
 
-- `<project-path>` — project folder containing `02-design-spec.md` and `02.5-design-explore.md`.
+- `<project-path>` — project folder containing `design-brief-[date].md` (most recent by date) and optionally `02.5-design-explore.md`.
 
 ## Steps
 
 ### 1. Read context
 
-- `02-design-spec.md` — layout pattern, components needed, acceptance criteria
-- `02.5-design-explore.md` → `## Chosen Direction` — the selected direction
-- `docs/context/brand.md` — palette and typography philosophy
+- `design-brief-[date].md` (most recent) — problem, layout pattern, components needed, acceptance criteria
+- `02.5-design-explore.md` → `## Chosen Direction` — the selected direction (if present)
+- `docs/context/brand.md` — palette and typography philosophy (if present)
 
 ### 2. Build the prototype
 
 Generate `<project-path>/prototype.html` — a **single, self-contained HTML file**:
+
+**CDN stack (copy exactly — do not substitute):**
 
 ```html
 <!DOCTYPE html>
@@ -29,8 +31,9 @@ Generate `<project-path>/prototype.html` — a **single, self-contained HTML fil
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>[Project Name] — Prototype</title>
-  <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  <!-- DaisyUI v4 must load before Tailwind v3 -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4/dist/full.min.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
   <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 </head>
 <body class="bg-base-100 text-base-content min-h-screen">
@@ -70,7 +73,48 @@ Use DaisyUI semantic classes for all UI elements. Do not build components from s
 | Avatars | `avatar`, `avatar-group` |
 | Stats | `stats`, `stat`, `stat-title`, `stat-value` |
 
-### 4. Accessibility — non-negotiable rules
+### 4. Visual quality — non-negotiable rules
+
+The prototype must look intentional, not like a first-pass dump. Apply every rule below before marking the prototype done.
+
+**Typography hierarchy**
+- Page title / section header: `text-2xl font-semibold` or `text-xl font-semibold`
+- Card title / sub-header: `text-base font-medium`
+- Body copy: `text-sm` (default weight — never bold)
+- Supporting / muted text: `text-xs text-base-content/60`
+- Never use `font-bold` on body copy — reserve `font-semibold` for headings only
+- Never use more than 3 font-size levels on a single screen
+
+**Spacing rhythm**
+- Page padding: `p-6` or `p-8` — no tighter than `p-4` at the root
+- Card inner padding: `p-4` or `p-6` — pick one and use it consistently
+- Grid/flex gap: `gap-4` for dense layouts, `gap-6` for standard, `gap-8` for wide
+- Vertically stacked text blocks inside a card: `space-y-1` between label + value
+
+**Card elevation**
+- Every card must have a visible lift: `shadow-sm` as the baseline
+- Never flat white-on-white (`card` with no shadow on `bg-base-100`)
+- Hover state on interactive cards: add `:hover:shadow-md transition-shadow`
+- Use `bg-base-200` for card backgrounds on `bg-base-100` pages (adds depth without shadow)
+
+**Color and action discipline**
+- Primary CTA per view: exactly one `btn-primary` — all secondary actions use `btn-ghost` or `btn-outline`
+- Status indicators: always use DaisyUI semantic badge/alert variants (`badge-error`, `badge-warning`, `badge-success`, `badge-info`) — never `bg-red-100 text-red-700` raw classes
+- Muted / disabled text: `text-base-content/50` — nothing lighter in interactive contexts
+- Accent colors: use sparingly — one accent per section, not per element
+
+**Content realism**
+- Use realistic data: real-looking names, dates, numbers, status labels — not "Lorem ipsum" or "User 1"
+- For dashboards: show mixed states (some OK, some warning, one critical) — not all green
+- For tables: at least 4–5 rows with varied data; one empty-ish state, one near-limit state
+- For forms: pre-fill example values in at least one field so layout is proven
+
+**Layout tightness check**
+- Before finalizing: scan for any section where two adjacent elements have inconsistent margins
+- Sidebar widths: fixed `w-64` or `w-56` — never `w-1/5` (breaks on narrow viewports)
+- Main content area: `flex-1 min-w-0` to prevent overflow with long text
+
+### 5. Accessibility — non-negotiable rules
 
 **Colour contrast:**
 - Body and label text: use `text-base-content` (never `text-gray-400` or lighter)
@@ -93,14 +137,14 @@ Use DaisyUI semantic classes for all UI elements. Do not build components from s
 - Alert/status messages: add `role="alert"` or `aria-live="polite"`
 - Loading states: add `aria-busy="true"` on the container
 
-### 5. Dark mode — verify both themes
+### 6. Dark mode — verify both themes
 
 DaisyUI themes handle colour adaptation automatically via `data-theme`. Ensure:
 - No hardcoded hex colours or raw Tailwind colour values (e.g. `text-gray-900`, `bg-white`) — use DaisyUI semantic classes only so dark mode works without extra work
 - Background hierarchy is preserved: `bg-base-100` (page) → `bg-base-200` (card) → `bg-base-300` (nested)
 - Check all states visually work in dark theme before confirming
 
-### 6. Cover all states
+### 7. Cover all states
 
 Use Alpine.js `x-show` / `x-if` to cover:
 - **Empty state** — when there's no data
@@ -118,7 +162,7 @@ Add a small state switcher in the top-left corner so reviewers can toggle betwee
 </div>
 ```
 
-### 7. Update STATUS.md
+### 8. Update STATUS.md
 
 ```
 state: prototype-ready
@@ -126,7 +170,7 @@ last_stage: 03-prototype
 next_action: Open prototype.html in a browser, check light + dark mode, then proceed to Stage 3.5
 ```
 
-### 8. Confirm completion
+### 9. Confirm completion
 
 Tell the user:
 - Path to `prototype.html`
