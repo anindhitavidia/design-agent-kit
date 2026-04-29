@@ -39,7 +39,7 @@ If either is missing, stop and tell the user what's needed.
 
 ### 3. Generate design spec
 
-If `PROJECT_DIR/design-spec-*.md` or `PROJECT_DIR/02-design-spec.md` already exists, ask:
+If `PROJECT_DIR/design-spec-*.md` already exists, ask:
 "Design spec already exists. Regenerate or keep existing? (regenerate / keep)"
 
 If regenerate or no existing spec: run the `/design-spec` flow inline:

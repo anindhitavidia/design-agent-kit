@@ -53,10 +53,19 @@ Do not proceed to the next stage until the user explicitly confirms.
 2. **Stage 2 — Design Brief**
    - Use `ux-designer` agent for user flows and edge cases.
    - Use `product-designer` agent for business framing.
-   - Output: `<project-path>/02-brief.md` (R: problem, target_users) AND `<project-path>/02-design-spec.md` (R: layout_pattern, components_needed).
-   - Validate both against their schemas.
-   - Update `STATUS.md` → `state: spec-ready, last_stage: 02-design-spec`.
-   - **If `confirmBeforeStages: true`:** pause here. This is the critical review gate — the user should read `02-brief.md` and `02-design-spec.md` and confirm the design direction before any code is written. Make this explicit in the prompt.
+   - Output: one file `<project-path>/design-brief-[date].md` covering both the problem
+     framing (problem statement, target users, success criteria, constraints) AND the design
+     direction (layout pattern, components needed, interactions, states). These belong in one
+     document — there is no separate `02-design-spec.md` at this stage.
+   - Validate against `brief.schema.json` (R: stage, project, problem, target_users).
+   - Update `STATUS.md` → `state: spec-ready, last_stage: 02-brief`.
+   - **If `confirmBeforeStages: true`:** pause here. This is the critical review gate — the
+     user should read `design-brief-[date].md` and confirm the direction before any code is
+     written. Make this explicit in the prompt.
+
+   Note: `design-spec-[date].md` (file mappings, component inventory, acceptance criteria) is
+   the engineering handoff artifact produced in Stage 4 by `/design-kit:design-spec` — it is
+   NOT a Stage 2 output.
 
 2.5. **Stage 2.5 — Design Explore** (optional, adversarial brief stress-test)
 

@@ -1,6 +1,7 @@
 {
   "$id": "https://design-agent-kit/schemas/v1/brief.schema.json",
-  "title": "02-brief.md frontmatter",
+  "title": "design-brief-[date].md frontmatter",
+  "description": "Stage 2 output — covers both the problem framing and the design direction. Not to be confused with design-spec-[date].md, which is the Stage 4 engineering handoff artifact.",
   "type": "object",
   "required": ["stage", "project", "problem", "target_users"],
   "properties": {
@@ -10,7 +11,16 @@
     "target_users": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
     "success_criteria": { "type": "array", "items": { "type": "string" } },
     "constraints": { "type": "array", "items": { "type": "string" } },
-    "out_of_scope": { "type": "array", "items": { "type": "string" } }
+    "out_of_scope": { "type": "array", "items": { "type": "string" } },
+    "layout_pattern": {
+      "type": "string",
+      "enum": ["form", "dashboard", "list-detail", "settings", "wizard", "modal", "table", "chart-heavy", "other"]
+    },
+    "components_needed": { "type": "array", "items": { "type": "string" } },
+    "new_components": { "type": "array", "items": { "type": "string" } },
+    "interactions": { "type": "array", "items": { "type": "string" } },
+    "states": { "type": "array", "items": { "type": "string" } },
+    "data_dependencies": { "type": "array", "items": { "type": "string" } }
   },
   "additionalProperties": true
 }

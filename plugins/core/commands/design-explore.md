@@ -26,8 +26,7 @@ Get today's date in YYYY-MM-DD format.
 
 ### 3. Verify design brief exists
 
-Check for: `PROJECT_DIR/design-brief-*.md`, `PROJECT_DIR/02-brief.md`, or
-`PROJECT_DIR/02-design-spec.md`.
+Check for: `PROJECT_DIR/design-brief-*.md` (use the most recent by date).
 
 If not found: stop —
 "No design brief found for this project. Run `/design-kit:design-brief` first — exploration
