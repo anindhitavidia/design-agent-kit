@@ -58,15 +58,67 @@ Do not proceed to the next stage until the user explicitly confirms.
    - Update `STATUS.md` → `state: spec-ready, last_stage: 02-design-spec`.
    - **If `confirmBeforeStages: true`:** pause here. This is the critical review gate — the user should read `02-brief.md` and `02-design-spec.md` and confirm the design direction before any code is written. Make this explicit in the prompt.
 
-2.5. **Stage 2.5 — Design Explore** (diverge pass)
-   - Invoke the `design-explore` skill with the locked spec as input.
-   - The skill generates 2-3 lightweight design directions that challenge and extend the brief — each with a distinct layout/interaction pattern, named DS components, and a trade-off summary.
-   - If the active stack profile has a `design-explore` command, dispatch to it to build cheap throwaway implementations in the browser (real DS components, no tests, no polish).
-   - Output: `<project-path>/02.5-design-explore.md` with all options and (after user picks) `## Chosen Direction`.
-   - **Always pause here** regardless of `confirmBeforeStages` — direction selection requires human judgment. Ask: "Which direction (or hybrid) should we take into prototyping? You can also say 'revise the brief first'."
-   - Record the chosen direction and any brief modifications in `02.5-design-explore.md`.
-   - Delete `explorations/` throwaway files after direction is chosen.
-   - Update `STATUS.md` → `state: explore-done, last_stage: 02.5-design-explore`.
+2.5. **Stage 2.5 — Design Explore** (optional, adversarial brief stress-test)
+
+   Check `STATUS.md` for `explore: yes/no/done`.
+   - If `done`: skip this stage entirely.
+   - If `yes` or `no`: use that value without asking.
+   - If not set: ask once — "Stress-test the brief before prototyping? Runs 3 challenge variants
+     (double-down / adjacent / invert) against the brief's committed direction and reports
+     validate / revise / reject. (yes / skip to prototype)"
+     Save the answer to `STATUS.md` under Sprint Config: `explore: [yes/no]`
+
+   If explore = yes:
+   1. Invoke the `design-explore` skill. The skill stress-tests the brief's committed direction
+      by generating 3 adversarial variants (double-down / adjacent / invert). If the active
+      stack profile has a `design-explore` command, dispatch to it to build cheap throwaway
+      implementations (real DS components, no tests, no polish) in `<project-dir>/_variants/[date]/`.
+   2. After variants are built, rank them against the brief and produce a scorecard + critic signal.
+   3. When the critic signal is ready, write `explore: done` to `STATUS.md`.
+   4. **Handle the critic signal** (always pause here regardless of `confirmBeforeStages`):
+
+      **Signal: VALIDATE** (double-down won) → brief is sound. Pause:
+      > "Explore validated the brief. The committed direction held up at its strongest form.
+      > Continue to Stage 3 (prototype) with confidence. (continue / stop here)"
+
+      **Signal: REVISE** (adjacent won) → brief needs calibration. Pause:
+      > "Explore signals **REVISE**. The adjacent direction outperformed the brief's committed
+      > direction: [adjacent direction summary]. Recommend updating the brief before prototyping.
+      >
+      > Options:
+      > - `revise brief` — re-enter Stage 2, carry the adjacent direction into the updated brief
+      > - `ignore and continue` — proceed to Stage 3 with the original brief
+      > - `stop here` — pause for discussion"
+
+      If `revise brief`: reset Stage 2 + Stage 2.5 status in `STATUS.md` (uncheck both, set
+      `explore: yes`). Loop back to Stage 2 with a note: "Previous brief was stress-tested;
+      critic recommended adjacent direction: [summary]. Incorporate this in the updated brief."
+
+      **Signal: REJECT** (invert won) → brief's premise may be wrong. Pause:
+      > "Explore signals **REJECT**. The inverted direction outperformed — the brief's core
+      > premise may be wrong: [inverted premise summary]. Recommend returning to brainstorming.
+      >
+      > Options:
+      > - `restart ideation` — reset Stages 1.5, 2, 2.5 and re-open brainstorming with the
+      >   inverted premise as a starting point
+      > - `ignore and continue` — proceed to Stage 3 with the original brief
+      > - `stop here` — pause for discussion"
+
+      If `restart ideation`: uncheck Stages 1.5, 2, 2.5 in `STATUS.md`, clear `ideation: done`
+      and `explore: done` (back to `ideation: yes` and `explore: yes`), loop back to Stage 1.5
+      with note: "Previous brief was rejected by stress-test; inverted premise: [summary]. Use
+      this as a starting point for re-ideation."
+
+      **Signal: UNDER-SPECIFIED** (all variants weak) → brief too vague to stress-test. Pause:
+      > "Explore signals **UNDER-SPECIFIED**. No variant could land — the brief doesn't commit
+      > to a sharp enough direction to stress-test. Sharpen the brief, then re-run Stage 2.5.
+      > (revise brief / stop here)"
+
+      If `revise brief`: reset Stage 2 + Stage 2.5 status in `STATUS.md`, set `explore: yes`,
+      loop back to Stage 2 with note: "Previous brief was under-specified — sharpen the committed
+      direction and success criteria."
+
+   If explore = no: proceed directly to Stage 3.
 
 3. **Stage 3 — Prototype** (dispatched to stack profile)
    - Read `design-kit.config.json` → `stackProfile`.
@@ -75,17 +127,29 @@ Do not proceed to the next stage until the user explicitly confirms.
    - The stack profile updates `STATUS.md` → `state: prototype-ready, last_stage: 03-prototype`.
    - **If `confirmBeforeStages: true`:** pause here. Ask user to review the prototype before Stage 3.5.
 
-3.5. **Stage 3.5 — Design Iterate** (stakeholder review loop)
-   - Run `design-qa` automatically on the prototype URL (if available).
-   - **Always pause here** regardless of `confirmBeforeStages` — stakeholder sign-off is required before handoff.
-   - Present the design-qa report and ask: "Share stakeholder feedback, or confirm sign-off to proceed to handoff prep."
-   - If feedback is provided:
-     - Log it in `STATUS.md` under `## Iteration Log` with date and summary.
-     - Invoke the relevant agents to address the feedback (ux-designer, design-engineer, qa-designer).
-     - Re-run `design-qa` after fixes.
-     - Pause again: "Changes made. Ready to proceed, or more revisions needed?"
-     - Repeat until explicit sign-off.
-   - Update `STATUS.md` → `state: review-approved, last_stage: 03.5-design-iterate`.
+3.5. **Stage 3.5 — Design Iterate** (score-based polish pass, on by default)
+
+   Check `STATUS.md` for `iterate: yes/no/done`.
+   - If `done`: skip this stage entirely.
+   - If `no`: skip this stage.
+   - If `yes` or not set (default): run the iteration. If not set, write `iterate: yes` to `STATUS.md`.
+
+   If iterate = yes:
+   1. Verify the prototype is accessible (local dev server or rendered URL from `STATUS.md`).
+      If not reachable: tell the user — "Dev server not reachable. Start it, then resume the sprint.
+      (stop here)"
+   2. Invoke the `design-iterate` skill (or `/design-kit:design-iterate <project-path>` if invoked
+      as a standalone command). The skill runs a score-based loop: design-qa → pick ONE finding →
+      fix → re-score → keep or revert. Stops when zero critical findings, plateau, or max rounds.
+   3. When iterate reports, write `iterate: done` to `STATUS.md`.
+   4. **Always pause here** regardless of `confirmBeforeStages` — stakeholder sign-off is required
+      before handoff prep. Present the polish results:
+      > "Polish pass complete. Starting score: [X], final score: [Y].
+      > [N] findings fixed, [M] need your judgment (see iterate log at `_qa/iterate-log-[date].md`).
+      > Stakeholder review needed before handoff prep.
+      > When sign-off is received, continue the sprint."
+   5. Wait for explicit stakeholder sign-off. Do NOT auto-proceed to Stage 4.
+   6. Update `STATUS.md` → `state: review-approved, last_stage: 03.5-design-iterate`.
 
 4. **Stage 4 — Handoff Prep** (dispatched to stack profile)
    - Invoke `/design-kit-{stackProfile}:handoff-prep <project-path>`.
@@ -96,9 +160,9 @@ Do not proceed to the next stage until the user explicitly confirms.
 If `STATUS.md` exists, resume from `last_stage` rather than starting over. The orchestrator decides:
 - `wip` → finish Stage 1 first, then check ideation
 - `wip` + `ideation: done` → skip ideation, proceed to Stage 2
-- `spec-ready` → run Stage 2.5 (design explore)
+- `spec-ready` → check Sprint Config: `explore: yes/no` — run Stage 2.5 or skip to Stage 3
 - `explore-done` → run Stage 3 (prototype)
-- `prototype-ready` → run Stage 3.5 (design iterate / stakeholder review)
+- `prototype-ready` → check Sprint Config: `iterate: yes/no` — run Stage 3.5 or skip to sign-off pause
 - `review-approved` → run Stage 4 (handoff prep)
 - `handed-off` → ask the user if they want to re-run anything
 
