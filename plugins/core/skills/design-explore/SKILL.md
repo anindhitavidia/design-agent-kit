@@ -80,9 +80,11 @@ written to `<project-dir>/02.5-design-explore.md`.
 5. **Dispatch variant generation in parallel** — one agent per stance (see `references/stances.md`),
    single message with multiple tool calls. Use the `design-engineer` skill or equivalent.
 6. **Each variant writes to its own subdirectory** independently. No shared state.
-7. **Rank the variants** — evaluate each variant against the brief's committed direction.
-   Produce a scorecard and a validate/revise/reject/under-specified signal.
-8. **Present the signal to the designer**, not just the winner.
+7. **Delegate ranking to `@design-critic`** — invoke after all variants are confirmed built.
+   The critic scores each variant across 5 dimensions (brief alignment, user outcome, DS
+   compliance, craft, stance) and produces a scorecard + validate/revise/reject/under-specified
+   signal. The scorecard is written to `<variant-dir>/scorecard.md`.
+8. **Present the critic's signal to the designer**, not just the winner.
 9. **Do not commit** — leave the variant directory for designer review.
 
 ## Stance Selection

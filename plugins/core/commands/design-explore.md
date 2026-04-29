@@ -61,19 +61,33 @@ If no stack profile or `discovery-only`:
 - Generate text-based direction descriptions (prose layout + DS component list + trade-off).
 - Write to `PROJECT_DIR/02.5-design-explore.md`.
 
-### 7. Rank and report critic signal
+### 7. Delegate ranking to @design-critic
 
-Evaluate the variants against the brief's committed direction. Produce a scorecard and signal:
+**If stack profile is active** (variants were built):
+Invoke `@design-critic`:
 
+> "Rank the [N] variants for [project] against the design brief.
+> Brief: [brief path]
+> Variants: [list variant paths]
+> Write your scorecard to: [variant-dir]/scorecard.md
+> Follow your standard scoring procedure.
+> Report back: signal (VALIDATE/REVISE/REJECT/UNDER-SPECIFIED), winner name, score, and top 3 adjustments needed."
+
+Wait for the critic to confirm the scorecard is written.
+
+**If no stack profile** (text-based directions only):
+Evaluate the directions inline against the brief. Use the scoring dimensions from the
+`design-critic` agent instructions (brief alignment, user outcome, DS compliance, craft,
+stance). Assign a score 0–20 per direction and determine the signal. Write the scorecard
+directly to `PROJECT_DIR/02.5-design-explore.md`.
+
+Signal mapping:
 | Winner | Signal |
 |---|---|
 | Double-down | **VALIDATE** — brief is sound, proceed to prototype with confidence |
 | Adjacent | **REVISE** — brief is close but miscalibrated, update before prototype |
 | Invert | **REJECT** — brief's core premise may be wrong, return to brainstorming |
-| All variants weak | **UNDER-SPECIFIED** — brief needs sharpening |
-
-Write the scorecard and signal to `PROJECT_DIR/02.5-design-explore.md` (or append to the
-text variants doc if stack profile is inactive).
+| All directions weak | **UNDER-SPECIFIED** — brief needs sharpening |
 
 ### 8. Present to user
 
