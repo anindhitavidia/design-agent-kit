@@ -52,12 +52,19 @@ running Explore."
 
 ### 6. Dispatch variants
 
-If `stackProfile` is set and the stack profile has a `design-explore` command:
+**If `stackProfile` is `react-nextjs` or `html`:**
 - Invoke `/design-kit-{stackProfile}:design-explore <project-path>` with the committed
   direction and stance templates from `references/stances.md`.
 - The stack profile builds variants in `PROJECT_DIR/_variants/[date]/[stance-name]/`.
 
-If no stack profile or `discovery-only`:
+**If `stackProfile` is `custom`:**
+- Dispatch the `design-engineer` agent directly (in parallel, one per stance) using the
+  stance prompt templates from `references/stances.md`. The agent reads
+  `docs/context/design-system.md` for component imports and conventions.
+- Variants are written to `PROJECT_DIR/_variants/[date]/[stance-name]/` using the user's
+  existing stack conventions.
+
+**If no stack profile or `discovery-only`:**
 - Generate text-based direction descriptions (prose layout + DS component list + trade-off).
 - Write to `PROJECT_DIR/02.5-design-explore.md`.
 
