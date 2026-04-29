@@ -13,5 +13,8 @@
   },
   "locale": "en",
   "confirmBeforeStages": true,
-  "marketResearch": "light"
+  "marketResearch": "light",
+  "features": {
+    "superpowers": false
+  }
 }
