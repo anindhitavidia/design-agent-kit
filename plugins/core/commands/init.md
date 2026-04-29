@@ -155,6 +155,15 @@ For `design-kit.config.json`: merge the config values collected in Step 6 (proje
 
 Use the Read tool to load each template and the Write tool to write the target. Do not use bash.
 
+Also ensure `.gitignore` at the target root contains these design-kit patterns (append if missing, do not overwrite):
+
+```
+# design-kit: exploration variants and iteration patches (not canonical, disposable)
+*/_variants/
+*/_qa/.iterate-*.patch
+*/_qa/.iterate-start-*
+```
+
 ---
 
 ## Step 8 — Append to CLAUDE.md
@@ -169,6 +178,8 @@ This repo uses [`design-agent-kit`](https://github.com/anindhitavidia/design-age
 Common commands:
 - `/design-kit:design-sprint <project-name>` — run the full design sprint pipeline
 - `/design-kit:design-brief <project-name>` — research + brief only
+- `/design-kit:design-explore <project-path>` — stress-test a brief with adversarial variants
+- `/design-kit:design-iterate <project-path>` — polish loop on a rendered prototype
 - `/design-kit:design-qa <url>` — run QA on a rendered URL
 - `/design-kit:brand-audit` — check brand consistency
 
