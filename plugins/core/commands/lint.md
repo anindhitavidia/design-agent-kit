@@ -22,8 +22,7 @@ design-kit:lint design-kit/projects/sso-rollout
 
   ✓ STATUS.md (R: 2/2, G: 1/1)
   ✓ 01-data-intent.md (R: 3/3, G: 1/2 — missing: key_metrics)
-  ⚠  02-brief.md (R: 4/4, G: 1/3 — missing: success_criteria, out_of_scope)
-  ✓ 02-design-spec.md (R: 4/4, G: 4/4)
+  ⚠  design-brief-2026-04-29.md (R: 4/4, G: 2/5 — missing: success_criteria, out_of_scope)
 
-  4 files checked. 0 errors, 4 warnings.
+  3 files checked. 0 errors, 3 warnings.
 ```

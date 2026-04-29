@@ -6,11 +6,11 @@
   "properties": {
     "state": {
       "type": "string",
-      "enum": ["wip", "spec-ready", "prototype-ready", "handed-off"]
+      "enum": ["wip", "spec-ready", "explore-done", "prototype-ready", "review-approved", "handed-off"]
     },
     "last_stage": {
       "type": "string",
-      "enum": ["01-data-intent", "02-brief", "02-design-spec", "03-prototype", "04-handoff"]
+      "enum": ["01-data-intent", "02-brief", "02.5-design-explore", "03-prototype", "03.5-design-iterate", "04-handoff"]
     },
     "last_run": {
       "type": "string",

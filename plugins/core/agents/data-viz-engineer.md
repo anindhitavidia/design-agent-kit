@@ -17,7 +17,7 @@ In this order:
 
 2. **Load the `frontend-design` skill** — invoke `frontend-design:frontend-design` to set design system component and quality standards for non-chart page elements.
 
-3. **Read the design brief** (if brief-driven mode) — it lives at the path declared in `design-kit.config.json` under `contextPaths.designSpec`, or at the default path `02-design-spec.md` within the active project directory. If no brief exists and you're in brief-driven mode, stop and report: "No design brief found. Run the design brief step first."
+3. **Read the design brief** (if brief-driven mode) — look for `design-brief-[date].md` in the active project directory (use the most recent by date). If no brief exists and you're in brief-driven mode, stop and report: "No design brief found. Run `/design-kit:design-brief` first."
 
    **Check the Visual References section of the brief:**
    - If a Figma URL is present: load the `figma:implement-design` skill and use `get_design_context` to read the design before writing any code.

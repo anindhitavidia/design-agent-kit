@@ -11,7 +11,7 @@ Sprint Stage 4 — package the HTML prototype for engineering handoff.
 ### 1. Read inputs
 
 - `<project-path>/prototype.html` — the approved prototype
-- `02-design-spec.md` — acceptance criteria and spec
+- `design-brief-[date].md` — acceptance criteria and spec
 - `03-prototype-notes.md` if it exists
 
 ### 2. Clean up the prototype
@@ -68,7 +68,7 @@ Write `<project-path>/HANDOFF.md`:
 
 - `prototype.html` — self-contained prototype covering all key states
 - `04-handoff/structure.md` — layout and component documentation
-- `02-design-spec.md` — original design spec and acceptance criteria
+- `design-brief-[date].md` — original design spec and acceptance criteria
 
 ## Engineering notes
 
