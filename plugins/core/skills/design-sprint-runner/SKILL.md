@@ -42,12 +42,33 @@ Do not proceed to the next stage until the user explicitly confirms.
    - **If `confirmBeforeStages: true`:** pause here. Ask user to review `01-data-intent.md` before continuing.
 
 1.5. **Stage 1.5 — Ideation** (optional)
-   - After Stage 1 pause is confirmed, ask once: "Want to explore design directions before writing the brief? Useful for complex or ambiguous projects. (brainstorm / skip to brief)"
-   - If the sprint's `STATUS.md` has `ideation: done`, skip without asking.
-   - **If brainstorm:** invoke the `brainstorming-design` skill with this context:
-     > "We're exploring design directions for [project]. Research intake is at `01-data-intent.md` — read it for signals and competitive context. Explore the problem space, challenge assumptions, surface non-obvious directions, and help decide which approach to take before committing to a design brief."
+   - After Stage 1 pause is confirmed, check `STATUS.md` for `ideation: yes/no/done`.
+     If `done`: skip entirely. If `yes`/`no`: use that. If not set: ask once —
+     "Want to explore design directions before writing the brief? Useful for complex or
+     ambiguous projects. (brainstorm / skip to brief)"
+     Save answer to `STATUS.md` Sprint Config: `ideation: [yes/no]`
+   - **If brainstorm:**
+
+     Read `design-kit.config.json` → `features.superpowers`.
+
+     **If `features.superpowers: true`** (superpowers plugin is installed):
+     Invoke `superpowers:brainstorming` with this context:
+     > "We're exploring design directions for [project].
+     > Research intake is at: `<project-path>/01-data-intent.md`
+     > Read it for quantitative signals, qualitative signals, and competitive context.
+     > Explore the problem space — challenge assumptions, surface non-obvious directions,
+     > and help us decide which approach to take before we commit to a design brief."
+
+     **If `features.superpowers: false`** (superpowers not installed):
+     Invoke the `brainstorming-design` skill with this context:
+     > "We're exploring design directions for [project]. Research intake is at
+     > `01-data-intent.md` — read it for signals and competitive context. Explore the
+     > problem space, challenge assumptions, surface non-obvious directions, and help
+     > decide which approach to take before committing to a design brief."
+
      When brainstorming concludes, write `ideation: done` to `STATUS.md`.
-     **If `confirmBeforeStages: true`:** pause here. Ask user to review explored directions before Stage 2.
+     **If `confirmBeforeStages: true`:** pause here. Ask user to review explored directions
+     before Stage 2.
    - **If skip:** proceed directly to Stage 2.
 
 2. **Stage 2 — Design Brief**

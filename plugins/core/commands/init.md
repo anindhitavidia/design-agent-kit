@@ -8,11 +8,37 @@ Set up design-kit in the current repo. Work through each step in order — do no
 
 ---
 
-## Step 1 — Detect tech stack and choose a profile
+## Step 1 — Scan the repo and detect context
 
-### 1a. Auto-detect the existing tech stack
+Silently scan the project before asking anything. The goal is to avoid re-asking things the
+repo already answers.
 
-Before presenting options, silently read the project to understand what's already here.
+### 1a. Read CLAUDE.md (if present)
+
+Read `CLAUDE.md` at the project root and extract:
+- **Product context** — any product description, team name, or domain info → pre-populate
+  `docs/context/product.md` (skip the Step 3 question if this is substantive)
+- **Installed plugins** — scan for lines mentioning `/plugin install` or plugin names.
+  Specifically note if `superpowers` is mentioned — this enables richer brainstorming in sprints.
+- **Coding conventions** — any style rules, file structure notes, or naming conventions
+  → inform `docs/context/coding-rules.md` in Step 2 (custom stack) or Step 7
+
+### 1b. Check existing context files
+
+Check for existing files in `docs/context/`:
+- `product.md` exists and is populated → skip the product context question in Step 3
+- `design-system.md` exists and is populated → skip Step 4
+- `brand.md` exists and is populated → skip Step 5
+- `personas.md` exists and is populated → skip scaffolding it in Step 7
+
+### 1c. Check installed plugins
+
+Read `~/.claude/plugins/installed_plugins.json` (or use `/plugin list`):
+- Note any installed `design-kit-*` plugins → used in Step 1d
+- Note if `superpowers` plugin is installed → save to config as `features.superpowers: true`.
+  This enables `superpowers:brainstorming` in sprint Stage 1.5 (richer than the built-in skill).
+
+### 1d. Detect tech stack
 
 **Read `package.json`** (if present). Look for:
 
@@ -38,19 +64,19 @@ shadcn (`components.json` exists or `@radix-ui/*` + `class-variance-authority`),
 `tailwindcss` → Tailwind, `styled-components` / `@emotion/*` → CSS-in-JS,
 `*.module.css` files → CSS Modules, `sass` / `scss` → SASS
 
-### 1b. Check installed stack profile plugins
+### 1e. Present findings and ask
 
-Check installed `design-kit-*` plugins via `/plugin list` (or `~/.claude/plugins/installed_plugins.json`).
+**If a `design-kit-*` stack profile plugin is already installed:** confirm it with the user
+and skip to Step 2. If multiple are installed, ask which to use.
 
-**If a matching stack profile plugin is already installed:** confirm it with the user and skip
-to Step 2. If multiple are installed, ask which to use.
+Show the user a brief summary of what was scanned, then present options:
 
-### 1c. Present findings and ask
-
-Show the user what was detected (or "nothing detected") and present the options:
-
-> "I detected **[framework] + [component library] + [CSS approach]** in this project."
-> (or: "I couldn't detect a framework — here are the options:")
+> "Here's what I found in this repo:
+> - Stack: **[framework + component library + CSS]** (or "nothing detected")
+> - Context files: **[list existing docs/context/ files]** (or "none yet")
+> - Plugins: **[list installed plugins]** (superpowers ✓ if detected)
+>
+> Choose a stack profile:"
 >
 > Choose a stack profile:
 >
@@ -216,7 +242,10 @@ For each file below that does **not** already exist at the target root, read the
 | `templates/docs/context/coding-rules.md` | `docs/context/coding-rules.md` |
 | `templates/design-kit.config.json` | `design-kit.config.json` |
 
-For `design-kit.config.json`: merge the config values collected in Steps 1–2 and 6 (stackProfile, customStack, projectRoot, confirmBeforeStages, locale, marketResearch) into the template before writing. For `custom` stack, set `customStack: { framework, componentLibrary, importPath, css }` from the values confirmed in Step 2.
+For `design-kit.config.json`: merge all values collected in Steps 1–2 and 6 into the template before writing:
+- `stackProfile`, `customStack` (from Steps 1–2)
+- `features.superpowers` — `true` if superpowers plugin was detected in Step 1c, else `false`
+- `projectRoot`, `confirmBeforeStages`, `locale`, `marketResearch` (from Step 6)
 
 Use the Read tool to load each template and the Write tool to write the target. Do not use bash.
 
