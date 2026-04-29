@@ -18,6 +18,49 @@ Sprint Stage 3 — HTML prototype.
 - `02.5-design-explore.md` → `## Chosen Direction` — the selected direction (if present)
 - `docs/context/brand.md` — palette and typography philosophy (if present)
 
+### 1.5. Set the visual theme — brand or inferred
+
+**If `brand.md` is present and populated:**
+- Extract the primary color and tone (professional/playful/calm/bold)
+- Pick the DaisyUI theme that best matches. Use Tailwind config to override `primary` if brand specifies a hex:
+  ```html
+  <script>
+    tailwind.config = {
+      theme: { extend: { colors: { primary: '#[brand-hex]' } } }
+    }
+  </script>
+  ```
+
+**If `brand.md` is absent or the user said "none":**
+- Read the product description from the brief. Infer the product category and pick from this table:
+
+  | Product category | DaisyUI theme | Rationale |
+  |---|---|---|
+  | Enterprise IT / admin / ops | `corporate` | Neutral navy, minimal color, professional |
+  | B2B SaaS / productivity | `nord` | Cool grays, calm, readable |
+  | Developer tools / CLI | `night` | Dark-first, high contrast |
+  | Finance / banking | `corporate` | Conservative, trust-signalling |
+  | Health / medical | `light` with `primary: #0ea5e9` | Clean, clinical |
+  | Consumer / marketing | `light` | Default DaisyUI, more colorful is OK |
+  | E-commerce | `light` | Standard |
+
+  Set `data-theme="[chosen]"` on `<html>`. If the chosen theme is dark-first (e.g. `night`), flip the Alpine toggle default: `x-data="{ dark: true }"`.
+
+  **Never leave `data-theme="light"` as a default for enterprise/admin tools** — it produces a random colorful palette that feels off-brand.
+
+**Status severity colors (any product type):**
+When conveying severity (critical / high / medium / low / info), use only these mappings — do NOT freestyle badge colors:
+
+| Severity | Badge class | Text class |
+|---|---|---|
+| Critical / Error / Danger | `badge-error` | `text-error-content` (auto) |
+| High / Warning | `badge-warning` | **always add `text-black`** — DaisyUI warning is yellow; `warning-content` can render white in some themes |
+| Medium / Info | `badge-info` | `text-info-content` (auto) |
+| Low / Success / Approved | `badge-success` | `text-success-content` (auto) |
+| Neutral / Tag | `badge-ghost` | auto |
+
+This applies to progress bars too: `progress-error`, `progress-warning`, `progress-success`, `progress-info`.
+
 ### 2. Build the prototype
 
 Generate `<project-path>/prototype.html` — a **single, self-contained HTML file**:
@@ -99,9 +142,10 @@ The prototype must look intentional, not like a first-pass dump. Apply every rul
 
 **Color and action discipline**
 - Primary CTA per view: exactly one `btn-primary` — all secondary actions use `btn-ghost` or `btn-outline`
-- Status indicators: always use DaisyUI semantic badge/alert variants (`badge-error`, `badge-warning`, `badge-success`, `badge-info`) — never `bg-red-100 text-red-700` raw classes
+- Status indicators: always use DaisyUI semantic badge/alert variants (`badge-error`, `badge-warning text-black`, `badge-success`, `badge-info`) — never `bg-red-100 text-red-700` raw classes
 - Muted / disabled text: `text-base-content/50` — nothing lighter in interactive contexts
 - Accent colors: use sparingly — one accent per section, not per element
+- **Color count**: if there's no brand.md, limit the palette to: primary (1 color), semantic status (error/warning/success/info only for their intended meaning), base-100/200/300 for backgrounds. No decorative purples, teals, oranges, or pinks unless the brand explicitly calls for them
 
 **Content realism**
 - Use realistic data: real-looking names, dates, numbers, status labels — not "Lorem ipsum" or "User 1"
@@ -119,8 +163,10 @@ The prototype must look intentional, not like a first-pass dump. Apply every rul
 **Colour contrast:**
 - Body and label text: use `text-base-content` (never `text-gray-400` or lighter)
 - Secondary/muted text: use `text-base-content/70` — do NOT use `text-gray-400`, `text-gray-300`, or any raw gray below `/60` opacity
-- Error and warning text: use DaisyUI semantic colours (`text-error`, `text-warning`) — these are contrast-safe
-- Never use colour alone to convey meaning — pair with an icon or label
+- **Warning (yellow) surfaces**: `badge-warning`, `alert-warning`, and `bg-warning` all use a yellow background. Yellow fails WCAG AA with white or light text. **Always add `text-black` explicitly** on any yellow/warning surface — do not rely on `warning-content` alone
+- **Colored button text**: `btn-warning` and any custom background button — verify text color manually. When unsure, use `text-black` on light/yellow buttons and `text-white` on dark/saturated buttons
+- Error and warning text in body copy: use `text-error`, `text-warning` — these are contrast-safe on `base-100` backgrounds only
+- Never use colour alone to convey meaning — pair with an icon or label (e.g. ⚠ High, not just a yellow badge)
 
 **Interactive elements:**
 - Every button must have visible text or an `aria-label`
